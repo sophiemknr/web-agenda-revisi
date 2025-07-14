@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link href="{{ asset('css/style_login.css') }}" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body>
@@ -25,7 +27,7 @@
                     <div class="password-container">
                         <input type="password" name="password" id="password" placeholder="Kata Sandi" required>
                         <span class="toggle-password">
-                            <ion-icon name="eye"></ion-icon>
+                            <ion-icon name="eye-off" id="eye-icon"></ion-icon>
                         </span>
                     </div>
                     <button type="submit">Masuk</button>
@@ -45,20 +47,6 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                this.classList.remove('fa-eye');
-                this.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                this.classList.remove('fa-eye-slash');
-                this.classList.add('fa-eye');
-            }
-        });
-    </script>
     <script src="{{ asset('js/login.js') }}"></script>
     </div>
     </div>

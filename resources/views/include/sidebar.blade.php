@@ -23,7 +23,7 @@
         </li>
 
         <li>
-            <a href="dashboard">
+            <a href="{{ route('dashboard') }}">
                 <span class="icon">
                     <ion-icon name="speedometer"></ion-icon>
                 </span>
@@ -32,7 +32,7 @@
         </li>
 
         <li>
-            <a href="agenda">
+            <a href="{{ route('agenda.index') }}">
                 <span class="icon">
                     <ion-icon name="calendar"></ion-icon>
                 </span>
@@ -41,7 +41,7 @@
         </li>
 
         <li>
-            <a href="new">
+            <a href="{{ route('new') }}">
                 <span class="icon">
                     <ion-icon name="add-circle"></ion-icon>
                 </span>
@@ -50,43 +50,7 @@
         </li>
 
         <li>
-            <a href="draft">
-                <span class="icon">
-                    <ion-icon name="pencil"></ion-icon>
-                </span>
-                <span class="title">Draft</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="tentative">
-                <span class="icon">
-                    <ion-icon name="help-circle"></ion-icon>
-                </span>
-                <span class="title">Tentative</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="confirm">
-                <span class="icon">
-                    <ion-icon name="checkmark-circle"></ion-icon>
-                </span>
-                <span class="title">Confirm</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="cancel">
-                <span class="icon">
-                    <ion-icon name="close-circle"></ion-icon>
-                </span>
-                <span class="title">Cancel</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="laporan">
+            <a href="{{ route('laporan') }}">
                 <span class="icon">
                     <ion-icon name="document-text"></ion-icon>
                 </span>
@@ -95,7 +59,7 @@
         </li>
 
         @auth
-            @if (auth()->user()->type === 'Superadmin' || auth()->user()->type === 'superadmin' || auth()->user()->type === 'Admin')
+            @if (in_array(auth()->user()->type, ['Admin', 'Operator']))
                 <li>
                     <a href="{{ route('user') }}">
                         <span class="icon">
@@ -108,7 +72,7 @@
         @endauth
 
         <li>
-            <a href="settings">
+            <a href="{{ url('/settings') }}">
                 <span class="icon">
                     <ion-icon name="settings"></ion-icon>
                 </span>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agenda;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
@@ -183,8 +184,9 @@ class AgendaController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Agenda berhasil disimpan!');
+        return redirect()->route('new')->with('success', 'Agenda berhasil disimpan!');
     }
+
     public function destroy($id)
     {
         $agenda = Agenda::findOrFail($id);
@@ -295,12 +297,33 @@ class AgendaController extends Controller
         return view('agenda.cancel', compact('agendas'));
     }
 
+    // app/Http/Controllers/AgendaController.php
+
     public function dashboard()
     {
-        $draft = Agenda::where('status', "draft")->get();
-        $tentative = Agenda::where('status', "tentative")->get();
-        $cancel = Agenda::where('status', "cancel")->get();
-        $confirm = Agenda::where('status', "confirmed")->get();
-        return view('dashboard', compact("draft", "tentative", "cancel", "confirm"));
+        // Tentukan rentang waktu satu bulan (dari awal hingga akhir bulan ini)
+        $startDate = \Carbon\Carbon::now()->startOfMonth();
+        $endDate = \Carbon\Carbon::now()->endOfMonth();
+
+        // Hitung jumlah agenda untuk setiap status dalam rentang waktu tersebut
+        $draftCount = Agenda::where('status', "draft")->whereBetween('date', [$startDate, $endDate])->count();
+        $tentativeCount = Agenda::where('status', "tentative")->whereBetween('date', [$startDate, $endDate])->count();
+        $cancelCount = Agenda::where('status', "cancel")->whereBetween('date', [$startDate, $endDate])->count();
+        $confirmCount = Agenda::where('status', "confirmed")->whereBetween('date', [$startDate, $endDate])->count();
+        $rescheduleCount = Agenda::where('status', 'reschedule')->whereBetween('date', [$startDate, $endDate])->count();
+
+        $logs = [];
+        if (class_exists(\App\Models\LogActivity::class)) {
+            $logs = \App\Models\LogActivity::latest()->limit(10)->get();
+        }
+
+        return view('dashboard', compact(
+            'draftCount',
+            'tentativeCount',
+            'cancelCount',
+            'confirmCount',
+            'rescheduleCount',
+            'logs'
+        ));
     }
 }

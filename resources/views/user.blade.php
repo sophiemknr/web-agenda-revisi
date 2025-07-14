@@ -48,47 +48,19 @@
 
                             <!-- Form User -->
                             <form method="POST"
-                                action="{{ isset($user) ? route('user.update', $user->id) : url('/user') }}">
+                                action="{{ isset($user) ? route('user.update', $user->id) : route('user.store') }}">
                                 @csrf
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                        value="{{ $user->name ?? old('name') }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Username</label>
-                                    <input type="text" class="form-control" name="username"
-                                        value="{{ $user->username ?? old('username') }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Email</label>
-                                    <input type="text" class="form-control" name="email"
-                                        value="{{ $user->email ?? old('email') }}">
-                                </div>
+                                @if (isset($user))
+                                    @method('POST')
+                                @endif
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Password</label>
                                     <input type="password" class="form-control" name="password"
-                                        placeholder="*isi jika ingin diubah">
+                                        placeholder="{{ isset($user) ? '*Isi jika ingin diubah' : '' }}">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Level</label>
-                                    <select class="form-select" name="type" aria-label="Default select example">
-                                        <option value="Superadmin"
-                                            {{ isset($user) && $user->type == 'Superadmin' ? 'selected' : '' }}>
-                                            Superadmin</option>
-                                        <option value="Admin"
-                                            {{ isset($user) && $user->type == 'Admin' ? 'selected' : '' }}>
-                                            Admin</option>
-                                        <option value="Operator"
-                                            {{ isset($user) && $user->type == 'Operator' ? 'selected' : '' }}>Operator
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-save"></i> {{ isset($user) ? 'Update' : 'Save' }}
-                                    </button>
-                                    <button type="reset" class="btn btn-secondary">Reset</button>
+                                    <label class="form-label fw-bold">Konfirmasi Password</label>
+                                    <input type="password" class="form-control" name="password_confirmation">
                                 </div>
                             </form>
 

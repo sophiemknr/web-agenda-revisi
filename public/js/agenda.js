@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const daysContainer = document.getElementById("days");
     const prevButton = document.getElementById("prev");
     const nextButton = document.getElementById("next");
-    const agendaList = document.getElementById("agenda-list");
+    const agendaItemsContainer = document.getElementById("agenda-items");
+    const filterButtons = document.querySelectorAll(".filter-btn");
 
     const months = [
         "Januari",
@@ -21,9 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     let nationalHolidays = {};
-
     let currentDate = new Date();
     let today = new Date();
+    let selectedStatus = "all"; // Default filter
+    let selectedDate = today.toISOString().split("T")[0]; // Default selected date
 
     function getStatusColor(status) {
         switch (status.toLowerCase()) {
@@ -44,13 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    async function fetchAgendasByDate(date) {
+    async function fetchAgendas(date) {
+        // This function now only fetches by date, filtering is done on the client-side from the full list
         try {
             const response = await fetch(`/api/agendas/${date}`);
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
+            if (!response.ok) throw new Error("Network response was not ok");
+            let data = await response.json();
 
             const holidayName = nationalHolidays[date];
             if (holidayName) {
@@ -64,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     status: "holiday",
                 });
             }
-
             return data;
         } catch (error) {
             console.error("Fetch error:", error);
@@ -72,24 +72,31 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    async function renderAgendaItems(selectedDateStr) {
-        agendaList.innerHTML = "<p>Loading...</p>";
+    async function renderAgendaItems(date) {
+        agendaItemsContainer.innerHTML = "<p>Loading...</p>";
+        const allAgendas = await fetchAgendas(date);
 
-        const agendas = await fetchAgendasByDate(selectedDateStr);
+        const filteredAgendas =
+            selectedStatus === "all"
+                ? allAgendas
+                : allAgendas.filter(
+                      (item) =>
+                          item.status &&
+                          item.status.toLowerCase() === selectedStatus
+                  );
 
-        agendaList.innerHTML = "";
+        agendaItemsContainer.innerHTML = ""; // Clear previous items
 
-        if (agendas.length === 0) {
-            agendaList.innerHTML = `<p>Tidak ada agenda di tanggal ini.</p>`;
+        if (filteredAgendas.length === 0) {
+            agendaItemsContainer.innerHTML = `<p>Tidak ada agenda.</p>`;
             return;
         }
 
-        agendas.forEach((item) => {
+        filteredAgendas.forEach((item) => {
             if (item.status === "holiday") {
-                agendaList.innerHTML += `<p style="color: red; font-weight: bold;">Hari Libur Nasional: ${item.title}</p>`;
+                agendaItemsContainer.innerHTML += `<p style="color: red; font-weight: bold;">Hari Libur Nasional: ${item.title}</p>`;
             } else {
                 const statusColor = getStatusColor(item.status);
-
                 const agendaHTML = `
                     <div class="agenda-item">
                         <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -122,22 +129,49 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <a href="/reschedule/${
                                     item.id
                                 }" style="background-color: #FFD43B;" class="btn-circle" title="Reschedule"><i class="fa-solid fa-calendar-days"></i></a>
-                                <button style="background-color: #4CAF50;" class="btn-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button style="background-color: #f44336;" class="btn-circle"><i class="fa-solid fa-trash"></i></button>
+                                <a href="/agenda/${
+                                    item.id
+                                }/edit" style="background-color: #4CAF50;" class="btn-circle"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <button onclick="deleteAgenda(${
+                                    item.id
+                                })" style="background-color: #f44336;" class="btn-circle"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
                         <div style="text-align: right; margin-top: 10px;">
-                            <span style="background-color: ${statusColor}; color: white; padding: 5px 10px; border-radius: 20px;">
-                                ${item.status}
-                            </span>
+                            <span style="background-color: ${statusColor}; color: white; padding: 5px 10px; border-radius: 20px;">${
+                    item.status
+                }</span>
                         </div>
-                    </div>
-                `;
-
-                agendaList.innerHTML += agendaHTML;
+                    </div>`;
+                agendaItemsContainer.innerHTML += agendaHTML;
             }
         });
     }
+
+    window.deleteAgenda = async function (id) {
+        if (confirm("Apakah Anda yakin ingin menghapus agenda ini?")) {
+            try {
+                const response = await fetch(`/agenda/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                });
+
+                if (response.ok) {
+                    toastr.success("Agenda berhasil dihapus!");
+                    renderAgendaItems(selectedDate); // Re-render the list for the currently selected date
+                } else {
+                    toastr.error("Gagal menghapus agenda.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                toastr.error("Terjadi kesalahan saat menghapus.");
+            }
+        }
+    };
 
     async function fetchAgendaDates(year, month) {
         try {
@@ -146,15 +180,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     month + 1
                 ).padStart(2, "0")}`
             );
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            if (!response.ok) throw new Error("Network response was not ok");
             const dates = await response.json();
-            const datesWithAgenda = new Set();
-            dates.forEach((dateStr) => {
-                const day = parseInt(dateStr.split("-")[2], 10);
-                datesWithAgenda.add(day);
-            });
+            const datesWithAgenda = new Set(
+                dates.map((dateStr) => parseInt(dateStr.split("-")[2], 10))
+            );
             return datesWithAgenda;
         } catch (error) {
             console.error("Fetch error:", error);
@@ -163,18 +193,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function fetchNationalHolidays(year) {
-        console.log("Fetching national holidays for year:", year);
         try {
             const response = await fetch(`/api/national-holidays?year=${year}`);
-            if (!response.ok) {
+            if (!response.ok)
                 throw new Error("Failed to fetch national holidays");
-            }
             const holidays = await response.json();
-            console.log("Received holidays:", holidays);
             nationalHolidays = {};
-            holidays.forEach((holiday) => {
-                nationalHolidays[holiday.date] = holiday.name;
-            });
+            holidays.forEach(
+                (holiday) => (nationalHolidays[holiday.date] = holiday.name)
+            );
         } catch (error) {
             console.error("Error fetching national holidays:", error);
             nationalHolidays = {};
@@ -191,16 +218,11 @@ document.addEventListener("DOMContentLoaded", function () {
         daysContainer.innerHTML = "";
 
         const agendaDates = await fetchAgendaDates(year, month);
-
-        let firstDayOfMonth = new Date(year, month, 1).getDay();
-        firstDayOfMonth = (firstDayOfMonth + 6) % 7;
-
+        let firstDayOfMonth = (new Date(year, month, 1).getDay() + 6) % 7;
         const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
-
-        const prevMonthDaysToShow = firstDayOfMonth;
         const lastDayOfPrevMonth = new Date(year, month, 0).getDate();
 
-        for (let i = prevMonthDaysToShow; i > 0; i--) {
+        for (let i = firstDayOfMonth; i > 0; i--) {
             const dayDiv = document.createElement("div");
             dayDiv.textContent = lastDayOfPrevMonth - i + 1;
             dayDiv.classList.add("fade");
@@ -210,54 +232,34 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 1; i <= totalDaysInMonth; i++) {
             const dayDiv = document.createElement("div");
             dayDiv.textContent = i;
-
-            if (agendaDates.has(i)) {
-                dayDiv.classList.add("has-agenda");
-            }
-
-            if (
-                i === today.getDate() &&
-                month === today.getMonth() &&
-                year === today.getFullYear()
-            ) {
-                dayDiv.classList.add("today");
-            }
-
             const dateStr = `${year}-${String(month + 1).padStart(
                 2,
                 "0"
             )}-${String(i).padStart(2, "0")}`;
+
+            if (agendaDates.has(i)) dayDiv.classList.add("has-agenda");
+            if (
+                i === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear()
+            )
+                dayDiv.classList.add("today");
             if (nationalHolidays[dateStr]) {
                 dayDiv.classList.add("holiday");
                 dayDiv.title = nationalHolidays[dateStr];
-                const dayOfWeek = new Date(year, month, i).getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) {
-                    dayDiv.style.color = "white";
-                }
             }
-
             const dayOfWeek = new Date(year, month, i).getDay();
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                dayDiv.classList.add("red");
-            }
+            if (dayOfWeek === 0) dayDiv.classList.add("red");
 
-            dayDiv.addEventListener("click", () => {
-                renderAgendaItems(dateStr);
+            dayDiv.addEventListener("click", function () {
+                selectedDate = dateStr;
+                renderAgendaItems(selectedDate);
             });
-
             daysContainer.appendChild(dayDiv);
-        }
-
-        const totalBoxes = prevMonthDaysToShow + totalDaysInMonth;
-        if (totalBoxes > 35) {
-            daysContainer.style.height = "245px";
-        } else {
-            daysContainer.style.height = "200px";
         }
 
         const totalRendered = daysContainer.children.length;
         const remaining = totalRendered % 7 === 0 ? 0 : 7 - (totalRendered % 7);
-
         for (let i = 1; i <= remaining; i++) {
             const dayDiv = document.createElement("div");
             dayDiv.textContent = i;
@@ -266,86 +268,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    prevButton.addEventListener("click", function () {
-        let month = currentDate.getMonth() - 1;
-        let year = currentDate.getFullYear();
-        if (month < 0) {
-            month = 11;
-            year -= 1;
-        }
-        currentDate = new Date(year, month, 1);
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            selectedStatus = button.dataset.status;
+            filterButtons.forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+            renderAgendaItems(selectedDate);
+        });
+    });
+
+    prevButton.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar(currentDate);
     });
 
-    nextButton.addEventListener("click", function () {
-        let month = currentDate.getMonth() + 1;
-        let year = currentDate.getFullYear();
-        if (month > 11) {
-            month = 0;
-            year += 1;
-        }
-        currentDate = new Date(year, month, 1);
+    nextButton.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar(currentDate);
     });
 
     renderCalendar(currentDate);
-
-    monthYear.addEventListener("click", function () {
-        if (monthYear.querySelector("select")) return;
-
-        const currentText = monthYear.textContent.trim();
-        const [currentMonthName, currentYear] = currentText.split(" ");
-        const currentMonthIndex = months.indexOf(currentMonthName);
-        const thisYear = new Date().getFullYear();
-
-        const wrapper = document.createElement("div");
-        wrapper.style.display = "inline-flex";
-        wrapper.style.gap = "5px";
-
-        const selectMonth = document.createElement("select");
-        months.forEach((m, i) => {
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = m;
-            if (i === currentMonthIndex) option.selected = true;
-            selectMonth.appendChild(option);
-        });
-
-        const selectYear = document.createElement("select");
-        for (let y = thisYear - 5; y <= thisYear + 5; y++) {
-            const option = document.createElement("option");
-            option.value = y;
-            option.textContent = y;
-            if (parseInt(currentYear) === y) option.selected = true;
-            selectYear.appendChild(option);
-        }
-
-        wrapper.appendChild(selectMonth);
-        wrapper.appendChild(selectYear);
-        monthYear.innerHTML = "";
-        monthYear.appendChild(wrapper);
-
-        const originalMonth = currentMonthIndex;
-        const originalYear = parseInt(currentYear);
-
-        function updateIfChanged() {
-            const newMonth = parseInt(selectMonth.value);
-            const newYear = parseInt(selectYear.value);
-
-            const hasMonthChanged = newMonth !== originalMonth;
-            const hasYearChanged = newYear !== originalYear;
-
-            if (hasMonthChanged || hasYearChanged) {
-                currentDate = new Date(newYear, newMonth, 1);
-                renderCalendar(currentDate);
-                monthYear.innerHTML = `${months[newMonth]} ${newYear}`;
-            }
-        }
-
-        selectMonth.addEventListener("change", updateIfChanged);
-        selectYear.addEventListener("change", updateIfChanged);
-    });
-
-    const todayStr = today.toISOString().split("T")[0];
-    renderAgendaItems(todayStr);
+    renderAgendaItems(selectedDate);
 });

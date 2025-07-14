@@ -35,12 +35,11 @@ body {
     width: 250px;
     height: 100%;
     background: var(--primary);
-    border-left: 10px solid var(--primary);
     transition: 0.5s;
     overflow: hidden;
 }
 .navigation.active {
-    width: 80px;
+    width: 100px;
 }
 
 .navigation ul {
@@ -154,8 +153,8 @@ body {
     transition: 0.5s;
 }
 .main.active {
-    width: calc(100% - 80px);
-    left: 80px;
+    width: calc(100% - 100px);
+    left: 100px;
 }
 
 .topbar {
@@ -335,3 +334,33 @@ body {
 .cardBox .card:hover .iconBox {
     color: var(--white);
 }
+
+/* ===================== FOOTER ===================== */
+
+/* .main-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main {
+    flex: 1 0 auto;
+    position: relative;
+    width: 100%;
+    left: 0;
+    background: var(--background);
+    transition: 0.5s;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: var(--tertiary);
+    color: var(--black);
+    text-align: center;
+    padding: 20px 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
