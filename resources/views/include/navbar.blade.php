@@ -8,7 +8,7 @@
     <div class="user" role="region" aria-label="User menu">
         <ion-icon name="person-circle-outline"></ion-icon>
         <div class="user-text">
-            <span>Superadmin</span>
+            <span>{{ Auth::user()->type ?? 'Guest' }}</span>
         </div>
     </div>
     <div class="dropdown-logout">

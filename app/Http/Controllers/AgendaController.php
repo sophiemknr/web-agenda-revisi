@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\LogActivity; // Import Trait
 
 class AgendaController extends Controller
 {
+    use LogActivity; // Gunakan Trait
+
     public function create()
     {
         return view('new');
@@ -90,77 +93,6 @@ class AgendaController extends Controller
         }
     }
 
-    // public function getNationalHolidays(Request $request)
-    // {
-    //     $year = $request->query('year');
-    //     if (!$year) {
-    //         return response()->json(['error' => 'Year parameter is required'], 400);
-    //     }
-
-    //     $apiKey = env('KALENDERINDONESIA_API_KEY');
-    //     $url = "https://kalenderindonesia.com/api/{$apiKey}/libur/masehi/{$year}";
-
-    //     try {
-    //         $client = new \GuzzleHttp\Client();
-    //         $response = $client->get($url);
-    //         $data = json_decode($response->getBody(), true);
-
-    //         if (isset($data['data']) && is_array($data['data'])) {
-    //             $holidays = [];
-
-    //             foreach ($data['data'] as $holiday) {
-    //                 $holidays[] = [
-    //                     'date' => $holiday['tanggal'],
-    //                     'name' => $holiday['keterangan'],
-    //                 ];
-    //             }
-
-    //             return response()->json($holidays);
-    //         } else {
-    //             return response()->json(['error' => 'No holidays found'], 404);
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching holidays: ' . $e->getMessage());
-    //         return response()->json(['error' => 'Failed to fetch holidays'], 500);
-    //     }
-    // }
-
-    // public function getNationalHolidays(Request $request)
-    // {
-    //     $year = $request->query('year');
-    //     if (!$year) {
-    //         return response()->json(['error' => 'Year parameter is required'], 400);
-    //     }
-
-    //     $apiKey = env('KALENDERINDONESIA_API_KEY');
-    //     $url = "https://kalenderindonesia.com/api/{$apiKey}/libur/masehi/{$year}";
-
-    //     try {
-    //         $client = new \GuzzleHttp\Client();
-    //         $response = $client->get($url);
-    //         $data = json_decode($response->getBody(), true);
-
-    //         if (isset($data['data']) && is_array($data['data'])) {
-    //             $holidays = [];
-
-    //             foreach ($data['data'] as $holiday) {
-    //                 $holidays[] = [
-    //                     'date' => $holiday['tanggal'],
-    //                     'name' => $holiday['keterangan'],
-    //                 ];
-    //             }
-
-    //             return response()->json($holidays);
-    //         } else {
-    //             return response()->json(['error' => 'No holidays found'], 404);
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching holidays from KalenderIndonesia: ' . $e->getMessage());
-    //         return response()->json(['error' => 'Failed to fetch holidays'], 500);
-    //     }
-    // }
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -173,7 +105,7 @@ class AgendaController extends Controller
             'disposition' => 'required',
         ]);
 
-        Agenda::create([
+        $agenda = Agenda::create([
             'date' => $request->date,
             'jam' => $request->jam,
             'title' => $request->title,
@@ -184,15 +116,56 @@ class AgendaController extends Controller
             'user_id' => Auth::id(),
         ]);
 
+        // Mencatat aktivitas
+        $this->addToLog('Menambahkan agenda baru: ' . $agenda->title);
+
         return redirect()->route('new')->with('success', 'Agenda berhasil disimpan!');
     }
 
+    public function edit($id)
+    {
+        $agenda = Agenda::findOrFail($id);
+        return view('agenda.edit', compact('agenda'));
+    }
+
+    /**
+     * Memperbarui data agenda di database.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'jam' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'tempat' => 'required',
+            'status' => 'required',
+            'disposition' => 'required',
+        ]);
+
+        $agenda = Agenda::findOrFail($id);
+        $agenda->update($request->all());
+
+        $this->addToLog('Memperbarui agenda: ' . $agenda->title);
+
+        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil diperbarui.');
+    }
+
+    /**
+     * Menghapus agenda.
+     * Modifikasi: Mengembalikan respons JSON.
+     */
     public function destroy($id)
     {
         $agenda = Agenda::findOrFail($id);
+        $title = $agenda->title; // Simpan judul untuk log
+
         $agenda->delete();
 
-        return redirect()->back()->with('success', 'Agenda berhasil dihapus.');
+        $this->addToLog('Menghapus agenda: ' . $title);
+
+        // PENTING: Kembalikan respons JSON, bukan redirect.
+        return response()->json(['success' => 'Agenda berhasil dihapus.']);
     }
 
     public function getAgendaDatesForMonth(Request $request)
@@ -227,14 +200,14 @@ class AgendaController extends Controller
 
     public function showByStatus($status)
     {
-        $allowedStatuses = ['draft', 'tentative', 'confirmed', 'cancel'];
+        $allowedStatuses = ['draft', 'tentative', 'confirm', 'cancel'];
         if (!in_array(strtolower($status), $allowedStatuses)) {
             abort(404);
         }
 
         $agendas = Agenda::whereRaw("LOWER(status) = ?", [strtolower($status)])->get();
 
-        $viewName = $status === 'confirmed' ? 'confirm' : $status;
+        $viewName = $status === 'confirm' ? 'confirm' : $status;
         return view("agenda.$viewName", compact('agendas', 'status'));
     }
 
@@ -264,15 +237,11 @@ class AgendaController extends Controller
 
     public function reschedule(Request $request)
     {
-        \Log::info('Reschedule Request Data:', $request->all());
+        \App\Models\LogActivity::info('Reschedule Request Data:', $request->all());
 
         $request->validate([
             'tanggal_reschedule' => 'required|date',
             'status' => 'required',
-            'jam' => 'required',
-            'kegiatan' => 'required',
-            'keterangan' => 'required',
-            'tempat' => 'required',
         ]);
 
         $agendaId = $request->input('agenda_id');
@@ -282,12 +251,15 @@ class AgendaController extends Controller
             'status' => 'reschedule',
         ]);;
 
+        // Mencatat aktivitas
+        $this->addToLog('Merubah jadwal agenda: ' . $agenda->title);
+
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil di-reschedule!');
     }
 
     public function confirm()
     {
-        $agendas = Agenda::where('status', 'confirmed')->get();
+        $agendas = Agenda::where('status', 'confirm')->get();
         return view('agenda.confirm', compact('agendas'));
     }
 
@@ -297,24 +269,21 @@ class AgendaController extends Controller
         return view('agenda.cancel', compact('agendas'));
     }
 
-    // app/Http/Controllers/AgendaController.php
-
     public function dashboard()
     {
-        // Tentukan rentang waktu satu bulan (dari awal hingga akhir bulan ini)
         $startDate = \Carbon\Carbon::now()->startOfMonth();
         $endDate = \Carbon\Carbon::now()->endOfMonth();
 
-        // Hitung jumlah agenda untuk setiap status dalam rentang waktu tersebut
         $draftCount = Agenda::where('status', "draft")->whereBetween('date', [$startDate, $endDate])->count();
         $tentativeCount = Agenda::where('status', "tentative")->whereBetween('date', [$startDate, $endDate])->count();
         $cancelCount = Agenda::where('status', "cancel")->whereBetween('date', [$startDate, $endDate])->count();
-        $confirmCount = Agenda::where('status', "confirmed")->whereBetween('date', [$startDate, $endDate])->count();
+        $confirmCount = Agenda::where('status', "confirm")->whereBetween('date', [$startDate, $endDate])->count();
         $rescheduleCount = Agenda::where('status', 'reschedule')->whereBetween('date', [$startDate, $endDate])->count();
 
+        // Mengambil log dari model LogActivity
         $logs = [];
         if (class_exists(\App\Models\LogActivity::class)) {
-            $logs = \App\Models\LogActivity::latest()->limit(10)->get();
+            $logs = \App\Models\LogActivity::with('user')->latest()->limit(10)->get();
         }
 
         return view('dashboard', compact(
@@ -325,5 +294,45 @@ class AgendaController extends Controller
             'rescheduleCount',
             'logs'
         ));
+    }
+
+    public function laporan(Request $request)
+    {
+        $query = Agenda::with('user')->orderBy('date', 'desc');
+
+        if ($request->filled('tanggal_awal')) {
+            $query->where('date', '>=', $request->tanggal_awal);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->where('date', '<=', $request->tanggal_akhir);
+        }
+
+        if ($request->filled('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
+        $agendas = $query->get();
+
+        return view('laporan', compact('agendas'));
+    }
+
+    public function getAgendasForMonth(Request $request)
+    {
+        $year = $request->query('year');
+        $month = $request->query('month');
+
+        if (!$year || !$month) {
+            return response()->json(['error' => 'Parameter tahun dan bulan dibutuhkan'], 400);
+        }
+
+        $agendas = Agenda::with('user')
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->orderBy('date', 'asc')
+            ->orderBy('jam', 'asc')
+            ->get();
+
+        return response()->json($agendas);
     }
 }

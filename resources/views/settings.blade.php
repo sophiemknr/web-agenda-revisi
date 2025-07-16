@@ -1,28 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app', ['pageTitle' => 'Settings'])
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Settings</title>
-</head>
+@section('title', 'Settings')
 
-<body>
-    <div class="container">
-        <!-- SIDEBAR -->
-        @include('include.sidebar')
+@push('styles')
+    <link href="{{ asset('css/style_settings.css') }}" rel="stylesheet">
+@endpush
 
-        <!-- MAIN -->
-        <div class="main">
-            @include('include.navbar', ['pageTitle' => 'Settings'])
-            @include('include.dropdown')
+@section('content')
+    <div class="settings-container">
+        <div class="settings-card">
+            <h2 class="settings-title">Kustomisasi Tampilan Website</h2>
 
-            <!-- CARDS -->
+            <div class="theme-options-grid">
+                <div class="theme-option" data-theme="tema1">
+                    <div class="theme-preview">
+                        <div class="color-box" style="background-color: #78B3CE;"></div>
+                        <div class="color-box" style="background-color: #F96E2A;"></div>
+                        <div class="color-box" style="background-color: #FBF8EF;"></div>
+                        <div class="color-box" style="background-color: #C9E6F0;"></div>
+                    </div>
+                    <p class="theme-name">Tema 1</p>
+                </div>
+
+                <div class="theme-option" data-theme="tema2">
+                    <div class="theme-preview">
+                        <div class="color-box" style="background-color: #A7C957;"></div>
+                        <div class="color-box" style="background-color: #BC6C25;"></div>
+                        <div class="color-box" style="background-color: #FEFAE0;"></div>
+                        <div class="color-box" style="background-color: #E9F5DB;"></div>
+                    </div>
+                    <p class="theme-name">Tema 2</p>
+                </div>
+
+                <div class="theme-option" data-theme="tema3">
+                    <div class="theme-preview">
+                        <div class="color-box" style="background-color: #B80C09;"></div>
+                        <div class="color-box" style="background-color: #F4A261;"></div>
+                        <div class="color-box" style="background-color: #FFF2D8;"></div>
+                        <div class="color-box" style="background-color: #FFE5B4;"></div>
+                    </div>
+                    <p class="theme-name">Tema 3</p>
+                </div>
+
+                <div class="theme-option" data-theme="tema4">
+                    <div class="theme-preview">
+                        <div class="color-box" style="background-color: #14213D;"></div>
+                        <div class="color-box" style="background-color: #4A90E2;"></div>
+                        <div class="color-box" style="background-color: #E5E5E5;"></div>
+                        <div class="color-box" style="background-color: #F0F4F8;"></div>
+                    </div>
+                    <p class="theme-name">Tema 4</p>
+                </div>
+            </div>
         </div>
-
-        <script src="{{ asset('js/main.js') }}"></script>
     </div>
-</body>
+@endsection
 
-</html>
+@push('scripts')
+    <script src="{{ asset('js/settings.js') }}"></script>
+@endpush

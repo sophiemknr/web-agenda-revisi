@@ -7,13 +7,13 @@
 .agenda-item {
     background-color: #fbf8ef;
     padding: 15px 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduce space between cards */
     border-radius: 10px;
     border: 1px solid #686868;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px; /* Reduce gap inside card */
     font-family: "Poppins", sans-serif;
     position: relative;
 }
@@ -87,11 +87,11 @@
     white-space: nowrap;
 }
 
-.agenda-status.confirmed {
+.agenda-status.confirm {
     background-color: #28a745;
 }
 
-.agenda-status.cancelled {
+.agenda-status.cancel {
     background-color: #dc3545;
 }
 
@@ -181,13 +181,13 @@
     color: black;
 }
 
-.holiday {
+.days .holiday {
     background-color: red;
     cursor: pointer;
     color: white;
     }
 
-.holiday:hover {
+.days .holiday:hover {
     background-color: #ffcccc;
     color: black;
     }
@@ -206,6 +206,132 @@
     color: red;
 }
 
+/* Style KHUSUS untuk hari libur di akhir pekan (lebih spesifik) */
+.days .holiday-weekend {
+    background-color: red !important; /* Latar belakang merah */
+    color: white !important;         /* Teks berwarna putih */
+    border-radius: 6px;
+}
+
+.days .holiday-weekend:hover {
+    background-color: #ffcccc !important;
+    color: black !important;
+}
+
 .weekdays .red {
     color: red;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap; /* Ini akan membuat tombol turun baris jika tidak muat */
+    gap: 5px; /* Memberi sedikit jarak antar tombol */
+}
+
+/* Styling untuk deskripsi hari libur */
+.holiday-description {
+    padding: 20px;
+    text-align: center;
+    background-color: #fff3f3; /* Latar belakang merah muda */
+    border: 1px solid #ffcccc;
+    border-radius: 10px;
+}
+
+.holiday-description p {
+    font-size: 1em;
+    color: #555;
+    margin: 0;
+}
+
+.holiday-description h3 {
+    font-size: 1.1em;
+    color: #d9534f; /* Warna merah */
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+.holiday-description h2 {
+    font-size: 1.5em;
+    color: #d9534f; /* Warna merah */
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Modern filter status button */
+.btn-group .filter-btn {
+    border-radius: 24px;
+    border: none;
+    background: #f3f6fa;
+    color: #686868;
+    font-weight: 600;
+    padding: 8px 20px;
+    font-size: 1em;
+    box-shadow: 0 2px 8px rgba(120,179,206,0.08);
+    transition: all 0.2s;
+    outline: none;
+    margin-right: 8px;
+}
+.btn-group .filter-btn.active,
+.btn-group .filter-btn:focus {
+    background: #78b3ce;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(120,179,206,0.15);
+}
+.btn-group .filter-btn:hover:not(.active) {
+    background: #eaf2f8;
+    color: #78b3ce;
+}
+
+/* Modern filter status dropdown */
+.filter-dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 220px;
+}
+.filter-dropdown {
+    border-radius: 24px;
+    border: none;
+    background: #f3f6fa;
+    color: #686868;
+    font-weight: 600;
+    padding: 8px 40px 8px 20px;
+    font-size: 1em;
+    box-shadow: 0 2px 8px rgba(120,179,206,0.08);
+    transition: all 0.2s;
+    outline: none;
+    margin-bottom: 10px;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.dropdown-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 1.3em;
+    color: #686868;
+}
+
+/* Responsive Styles for Agenda Page */
+@media (max-width: 992px) {
+    .cards {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    /* Target div di dalam .cards pada halaman agenda */
+    .agenda-container,
+    .calendar-container {
+        width: 100% !important; /* !important untuk menimpa inline style */
+        max-width: 500px;
+        margin-bottom: 20px;
+    }
+
+    .calendar {
+        width: 100%;
+    }
 }

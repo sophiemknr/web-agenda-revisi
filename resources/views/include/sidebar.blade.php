@@ -1,7 +1,7 @@
 <style>
     .navigation {
         max-height: 100vh;
-        overflow-y: auto;
+        overflow-y: hidden;
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
@@ -59,7 +59,7 @@
         </li>
 
         @auth
-            @if (in_array(auth()->user()->type, ['Admin', 'Operator']))
+            @if (auth()->user()->type === 'Admin')
                 <li>
                     <a href="{{ route('user') }}">
                         <span class="icon">

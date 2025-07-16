@@ -16,17 +16,14 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 // Rute yang Membutuhkan Autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AgendaController::class, 'dashboard'])->name('dashboard');
-    Route::post('/logout', function () {
-        Auth::logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-        return redirect('/');
-    })->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Agenda
     Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
     Route::get('/new', [AgendaController::class, 'create'])->name('new');
     Route::post('/agenda', [AgendaController::class, 'store'])->name('agenda.store');
+    Route::get('/agenda/{id}/edit', [AgendaController::class, 'edit'])->name('agenda.edit');
+    Route::put('/agenda/{id}', [AgendaController::class, 'update'])->name('agenda.update');
     Route::delete('/agenda/{id}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
     Route::get('/reschedule/{id}', [AgendaController::class, 'showRescheduleForm'])->name('agenda.reschedule');
     Route::post('/reschedule/{id}', [AgendaController::class, 'reschedule'])->name('agenda.reschedule.update');
@@ -39,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/settings', 'settings')->name('settings');
 
     // API
+    Route::get('/api/agendas-for-month', [AgendaController::class, 'getAgendasForMonth']);
     Route::get('/api/agendas/{date}', [AgendaController::class, 'getAgendasByDate']);
     Route::get('/api/agenda-dates', [AgendaController::class, 'getAgendaDatesForMonth']);
     Route::get('/api/national-holidays', [AgendaController::class, 'getNationalHolidays']);

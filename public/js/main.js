@@ -54,3 +54,21 @@ window.addEventListener("click", function (event) {
         }
     }
 });
+
+let lastScrollTop = 0;
+const navbar = document.querySelector(".topbar");
+
+window.addEventListener(
+    "scroll",
+    function () {
+        let scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight) {
+            navbar.classList.add("hide");
+        } else {
+            navbar.classList.remove("hide");
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    },
+    false
+);

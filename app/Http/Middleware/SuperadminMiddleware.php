@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth; // 1. Import Auth Facade
 
 class SuperadminMiddleware
 {
@@ -15,10 +16,9 @@ class SuperadminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()?->type === 'Superadmin' || auth()->user()?->type === 'superadmin' || auth()->user()?->type === 'Admin') {
+        if (Auth::check() && Auth::user()->type === 'Admin') {
             return $next($request);
         }
-
-        abort(403, 'Akses ditolak. Anda bukan Superadmin atau Admin');
+        abort(403, 'Akses ditolak. Hanya Admin yang dapat mengakses halaman ini.');
     }
 }

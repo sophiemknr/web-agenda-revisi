@@ -26,7 +26,7 @@ return new class extends Migration
         });
 
         // Menambahkan constraint untuk memastikan data status valid
-        DB::statement("ALTER TABLE agendas ADD CONSTRAINT agendas_status_check CHECK (status IN ('draft', 'tentative', 'confirmed', 'cancel', 'reschedule'))");
+        DB::statement("ALTER TABLE agendas ADD CONSTRAINT agendas_status_check CHECK (status IN ('draft', 'tentative', 'confirm', 'cancel', 'reschedule'))");
     }
 
     /**
