@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
-use App\Traits\LogActivity; // Import Trait
+use App\Traits\LogActivity;
 
 class AgendaController extends Controller
 {
-    use LogActivity; // Gunakan Trait
+    use LogActivity;
 
     public function create()
     {
@@ -119,7 +119,7 @@ class AgendaController extends Controller
         // Mencatat aktivitas
         $this->addToLog('Menambahkan agenda baru: ' . $agenda->title);
 
-        return redirect()->route('new')->with('success', 'Agenda berhasil disimpan!');
+        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil disimpan!');
     }
 
     public function edit($id)
@@ -237,7 +237,6 @@ class AgendaController extends Controller
 
     public function reschedule(Request $request)
     {
-        \App\Models\LogActivity::info('Reschedule Request Data:', $request->all());
 
         $request->validate([
             'tanggal_reschedule' => 'required|date',
@@ -280,11 +279,19 @@ class AgendaController extends Controller
         $confirmCount = Agenda::where('status', "confirm")->whereBetween('date', [$startDate, $endDate])->count();
         $rescheduleCount = Agenda::where('status', 'reschedule')->whereBetween('date', [$startDate, $endDate])->count();
 
-        // Mengambil log dari model LogActivity
-        $logs = [];
-        if (class_exists(\App\Models\LogActivity::class)) {
-            $logs = \App\Models\LogActivity::with('user')->latest()->limit(10)->get();
+        // Log Activity: Pagination, Search, Show Entries
+        $show = (int) request()->input('log_show', 10);
+        $search = request()->input('log_search', '');
+        $logQuery = \App\Models\LogActivity::with('user')->latest();
+        if ($search) {
+            $logQuery->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%$search%")
+                    ->orWhereHas('user', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%$search%");
+                    });
+            });
         }
+        $logs = $logQuery->paginate($show)->appends(['log_search' => $search, 'log_show' => $show]);
 
         return view('dashboard', compact(
             'draftCount',
@@ -292,7 +299,9 @@ class AgendaController extends Controller
             'cancelCount',
             'confirmCount',
             'rescheduleCount',
-            'logs'
+            'logs',
+            'show',
+            'search'
         ));
     }
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('login');
 })->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 
 // Rute yang Membutuhkan Autentikasi
 Route::middleware(['auth'])->group(function () {

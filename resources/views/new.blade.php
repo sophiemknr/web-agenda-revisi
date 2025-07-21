@@ -4,8 +4,7 @@
 
 @section('content')
     <h2 class="text-center fw-bold mt-4">Tambah Agenda</h2>
-    <div class="form-container">
-
+    <div class="agenda-form-card">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -15,52 +14,54 @@
                 </ul>
             </div>
         @endif
-
-        <form class="p-4" action="{{ route('agenda.store') }}" method="POST">
+        <form class="agenda-form-grid" action="{{ route('agenda.store') }}" method="POST">
             @csrf
-            <div class="mb-3">
-                <label for="date" class="form-label fw-bold">Tanggal</label>
-                <input type="date" class="form-control" name="date" required>
+            <div class="agenda-form-row">
+                <div class="agenda-form-group">
+                    <label for="date" class="agenda-label">Tanggal</label>
+                    <input type="date" class="agenda-input" name="date" required>
+                </div>
+                <div class="agenda-form-group">
+                    <label for="tempat" class="agenda-label">Tempat</label>
+                    <input type="text" class="agenda-input" name="tempat" required placeholder="Enter text">
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="jam" class="form-label fw-bold">Jam</label>
-                <input type="time" class="form-control" name="jam" required>
+            <div class="agenda-form-row">
+                <div class="agenda-form-group">
+                    <label for="jam" class="agenda-label">Jam</label>
+                    <input type="time" class="agenda-input" name="jam" required>
+                </div>
+                <div class="agenda-form-group">
+                    <label for="status" class="agenda-label">Status</label>
+                    <select class="agenda-input" name="status" required>
+                        <option value="">- Pilih -</option>
+                        <option value="draft">Draft</option>
+                        <option value="tentative">Tentative</option>
+                        <option value="confirm">Confirm</option>
+                        <option value="cancel">Cancel</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="title" class="form-label fw-bold">Kegiatan</label>
-                <textarea class="form-control" name="title" rows="2" required></textarea>
+            <div class="agenda-form-row">
+                <div class="agenda-form-group">
+                    <label for="title" class="agenda-label">Kegiatan</label>
+                    <textarea class="agenda-input" name="title" rows="2" required></textarea>
+                </div>
+                <div class="agenda-form-group">
+                    <label for="disposition" class="agenda-label">Mewakilkan/Disposisi</label>
+                    <input type="text" class="agenda-input" name="disposition" required
+                        placeholder="Mewakilkan/Disposisi">
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="description" class="form-label fw-bold">Keterangan</label>
-                <textarea class="form-control" name="description" rows="2" required></textarea>
+            <div class="agenda-form-row">
+                <div class="agenda-form-group" style="width:100%;">
+                    <label for="description" class="agenda-label">Keterangan</label>
+                    <textarea class="agenda-input" name="description" rows="2" required></textarea>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label for="tempat" class="form-label fw-bold">Tempat</label>
-                <input type="text" class="form-control" name="tempat" required>
+            <div class="agenda-form-row" style="justify-content: flex-end;">
+                <button type="submit" class="btn btn-simpan">Simpan Agenda</button>
             </div>
-
-            <div class="mb-3">
-                <label for="status" class="form-label fw-bold">Status</label>
-                <select class="form-select" name="status" required>
-                    <option value="draft">Draft</option>
-                    <option value="tentative">Tentative</option>
-                    <!-- Removed legacy 'confirmed' option -->
-                    <option value="confirm">Confirm</option>
-                    <option value="cancel">Cancel</option>
-                    <option value="reschedule">Reschedule</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="disposition" class="form-label fw-bold">Disposisi</label>
-                <input type="text" class="form-control" name="disposition" required>
-            </div>
-
-            <button type="submit" class="btn btn-danger w-100">Simpan Agenda</button>
         </form>
     </div>
 @endsection

@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h3>Hari Libur Nasional:</h3>
                 <h2>${nationalHolidays[fullDateStr]}</h2>
             </div>`;
-            return; // Hentikan fungsi agar tidak mencari agenda
+            return;
         }
         // --- AKHIR PERBAIKAN LOGIKA ---
 
@@ -130,33 +130,43 @@ document.addEventListener("DOMContentLoaded", function () {
         agendaItemsContainer.innerHTML = "";
 
         if (filteredAgendas.length === 0) {
-            agendaItemsContainer.innerHTML = `<p>Tidak ada agenda untuk ditampilkan.</p>`;
+            const isTema4 =
+                document.documentElement.getAttribute("data-theme-active") ===
+                "tema4";
+            agendaItemsContainer.innerHTML = `<p style="color:${
+                isTema4 ? "#fff" : ""
+            };">Tidak ada agenda untuk ditampilkan.</p>`;
             return;
         }
 
         filteredAgendas.forEach((item) => {
             const statusColor = getStatusColor(item.status);
+            // Deteksi tema aktif
+            const isTema4 =
+                document.documentElement.getAttribute("data-theme-active") ===
+                "tema4";
+            const iconColor = isTema4 ? "var(--secondary)" : "var(--primary)";
             const agendaHTML = `
                 <div class="agenda-item">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <div>
-                            <p><i class="fa-solid fa-calendar-days" style="color: #78B3CE;"></i> <strong>:</strong> ${new Date(
-                                item.date
-                            ).toLocaleDateString("id-ID", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                            })}</p>
-                            <p><i class="fa-solid fa-clock" style="color: #78B3CE;"></i> <strong>:</strong> ${
-                                item.jam
-                            }</p>
-                            <p><strong style="color: #78B3CE;">Ket:</strong> ${
-                                item.title
-                            }</p>
-                            <p><i class="fa-solid fa-location-dot" style="color: #78B3CE;"></i> <strong>:</strong> ${
-                                item.tempat
-                            }</p>
+                            <p><i class="fa-solid fa-calendar-days" style="color: ${iconColor};"></i> <strong>:</strong> ${new Date(
+                item.date
+            ).toLocaleDateString("id-ID", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            })}</p>
+                                            <p><i class="fa-solid fa-clock" style="color: ${iconColor};"></i> <strong>:</strong> ${
+                item.jam
+            }</p>
+                                            <p><strong style="color: ${iconColor};">Ket:</strong> ${
+                item.title
+            }</p>
+                                            <p><i class="fa-solid fa-location-dot" style="color: ${iconColor};"></i> <strong>:</strong> ${
+                item.tempat
+            }</p>
                             <p><strong style="color: orange;">Disposisi:</strong> ${
                                 item.disposition || "N/A"
                             }</p>
@@ -225,7 +235,17 @@ document.addEventListener("DOMContentLoaded", function () {
             )}-${String(i).padStart(2, "0")}`;
             const dayOfWeek = new Date(year, month, i).getDay();
 
-            if (agendaDates.has(i)) dayDiv.classList.add("has-agenda");
+            const isTema4 =
+                document.documentElement.getAttribute("data-theme-active") ===
+                "tema4";
+            if (agendaDates.has(i)) {
+                dayDiv.classList.add("has-agenda");
+                if (isTema4) {
+                    dayDiv.style.backgroundColor = "#383187";
+                    dayDiv.style.color = "#fff";
+                    dayDiv.style.borderRadius = "6px";
+                }
+            }
             if (
                 i === today.getDate() &&
                 month === today.getMonth() &&
@@ -240,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         : "holiday"
                 );
                 dayDiv.title = nationalHolidays[dateStr];
-            } else if (dayOfWeek === 0) {
+            } else if (dayOfWeek === 0 || dayOfWeek === 6) {
                 dayDiv.classList.add("red");
             }
 

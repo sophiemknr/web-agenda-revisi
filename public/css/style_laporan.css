@@ -1,3 +1,41 @@
+html[data-theme-active="tema4"] .laporan-table,
+html[data-theme-active="tema4"] .laporan-table thead,
+html[data-theme-active="tema4"] .laporan-table tbody {
+    background: var(--primary) !important;
+    background-color: var(--primary) !important;
+}
+html[data-theme-active="tema4"] .laporan-table th,
+html[data-theme-active="tema4"] .laporan-table td {
+    color: #fff !important;
+    border-bottom: 1px solid #383187 !important;
+    padding: 12px 15px !important;
+    text-align: left;
+    white-space: nowrap;
+}
+html[data-theme-active="tema4"] .laporan-table thead th {
+    font-weight: 600;
+    color: #fff !important;
+    border-bottom-width: 2px;
+}
+html[data-theme-active="tema4"] .laporan-table tbody tr:hover {
+    background-color: var(--secondary) !important;
+}
+html[data-theme-active="tema4"] .laporan-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+html[data-theme-active="tema4"] .laporan-table,
+html[data-theme-active="tema4"] .laporan-table thead,
+html[data-theme-active="tema4"] .laporan-table tbody {
+    background: var(--primary) !important;
+    background-color: var(--primary) !important;
+}
+html[data-theme-active="tema4"] .laporan-table th,
+html[data-theme-active="tema4"] .laporan-table td {
+    color: #fff !important;
+}
+html[data-theme-active="tema4"] .laporan-table tbody tr:hover {
+    background-color: var(--secondary) !important;
+}
 /* =====================font google================ */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 

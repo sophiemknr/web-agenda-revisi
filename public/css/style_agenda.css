@@ -1,3 +1,142 @@
+/* Kalender arrow ionicons warna secondary dan hover lebih muda tiap tema */
+.calendar-chevron {
+    font-size: 2.2em;
+    vertical-align: middle;
+    color: var(--secondary);
+    transition: color 0.2s, background 0.2s;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.calendar-arrow:hover .calendar-chevron {
+    color: #fe9b69;
+    background: rgba(120,179,206,0.12);
+}
+html[data-theme-active="tema1"] .calendar-arrow:hover .calendar-chevron {
+    color: #fe9b69;
+    background: rgba(120,179,206,0.12);
+}
+html[data-theme-active="tema2"] .calendar-arrow:hover .calendar-chevron {
+    color: #d9a083;
+    background: rgba(165,182,141,0.12);
+}
+html[data-theme-active="tema3"] .calendar-arrow:hover .calendar-chevron {
+    color: #f9c97a;
+    background: rgba(242,159,88,0.12);
+}
+html[data-theme-active="tema4"] .calendar-arrow:hover .calendar-chevron {
+    color: rgb(157, 189, 248);
+    background: rgba(68,119,206,0.12);
+}
+html[data-theme-active="tema4"] .calendar-arrow i {
+    color: #fff !important;
+}
+html[data-theme-active="tema4"] .days .today:hover,
+html[data-theme-active="tema4"] .days .has-agenda:hover {
+    background-color: #221F43 !important;
+    color: #fff !important;
+}
+/* Responsive Styles for Agenda Page */
+@media (max-width: 992px) {
+  .cards {
+  .main,
+  .main.active {
+    margin-right: 24px !important;
+  }
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  .cards {
+    padding: 16px 24px 16px 0;
+    width: calc(100vw - 94px);
+  }
+    flex-direction: column;
+    gap: 24px;
+  }
+  .cards > div {
+    width: 100% !important;
+    margin-bottom: 16px;
+  }
+  .calendar {
+    width: 100%;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-x: auto;
+  }
+  .agenda-container {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 4px;
+  }
+
+  .calendar {
+    font-size: 14px;
+    padding: 0;
+  }
+
+  .agenda-container {
+    font-size: 14px;
+    padding: 6px;
+  }
+  .agenda-item {
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+  .agenda-item p {
+    margin-bottom: 4px;
+  }
+  .btn-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+/* Tema 1 (Default) */
+:root {
+    --primary: #78B3CE;
+    --secondary: #F96E2A;
+    --tertiary: #FBF8EF;
+    --background: #C9E6F0;
+    --white: #ffffff;
+    --gray: #686868;
+    --black: #000000;
+}
+
+/* Tema 2 (Hijau & Coklat) */
+html[data-theme-active="tema2"] {
+    --primary: #A5B68D;
+    --secondary: #DA8359;
+    --tertiary: #FBF8EF;
+    --background: #E7F0DB;
+}
+
+/* Tema 3 (Merah & Kuning) */
+html[data-theme-active="tema3"] {
+    --primary: #A31D1D;
+    --secondary: #F29F58;
+    --tertiary: #FBF8EF;
+    --background: #FFF6D9;
+}
+
+/* Tema 4 (Biru Tua) */
+html[data-theme-active="tema4"] {
+    --primary: #130F2D;
+    --secondary: #4477CE;
+    --tertiary: #221F43;
+    --background: #19133B;
+}
+
 .agenda-container {
     padding: 20px;
     background-color: white;
@@ -102,7 +241,7 @@
 }
 
 .has-agenda {
-    background-color: #78b3ce;
+    background-color: var(--primary);
     color: white;
     border-radius: 6px;
 }
@@ -177,23 +316,45 @@
 }
 
 .days div:hover {
-    background-color: #d3edfb;
-    color: black;
+    background-color: #d0f0ff;
+    color: #19133B;
+}
+
+html[data-theme-active="tema1"] .days div:hover {
+    background-color: #d0f0ff;
+    color: #222;
+}
+html[data-theme-active="tema2"] .days div:hover {
+    background-color: #e2ffce;
+    color: #222;
+}
+html[data-theme-active="tema3"] .days div:hover {
+    background-color: #f7d9c0;
+    color: #222;
+}
+html[data-theme-active="tema4"] .days div:hover {
+    background-color: #221F43;
+    color: #fff;
 }
 
 .days .holiday {
     background-color: red;
     cursor: pointer;
     color: white;
-    }
+}
 
-.days .holiday:hover {
-    background-color: #ffcccc;
-    color: black;
-    }
+.days .holiday:hover,
+.days .holiday-weekend:hover {
+    background-color: #fa9090 !important;
+    color: black !important;
+}
 
+html[data-theme-active="tema4"] .days .today {
+    background-color: var(--secondary) !important;
+    color: #fff !important;
+}
 .days .today {
-    background-color: #f96e2a;
+    background-color: var(--secondary);
     color: white;
     border-radius: 6px;
 }
@@ -213,11 +374,6 @@
     border-radius: 6px;
 }
 
-.days .holiday-weekend:hover {
-    background-color: #ffcccc !important;
-    color: black !important;
-}
-
 .weekdays .red {
     color: red;
 }
@@ -229,6 +385,17 @@
 }
 
 /* Styling untuk deskripsi hari libur */
+html[data-theme-active="tema4"] .holiday-description {
+    background-color: #221F43 !important;
+    border-color: #383187 !important;
+}
+html[data-theme-active="tema4"] .holiday-description p {
+    color: #b3c6e6 !important;
+}
+html[data-theme-active="tema4"] .holiday-description h3,
+html[data-theme-active="tema4"] .holiday-description h2 {
+    color: #d9534f !important;
+}
 .holiday-description {
     padding: 20px;
     text-align: center;
@@ -257,32 +424,16 @@
     margin-top: 5px;
 }
 
-/* Modern filter status button */
-.btn-group .filter-btn {
-    border-radius: 24px;
-    border: none;
-    background: #f3f6fa;
-    color: #686868;
-    font-weight: 600;
-    padding: 8px 20px;
-    font-size: 1em;
-    box-shadow: 0 2px 8px rgba(120,179,206,0.08);
-    transition: all 0.2s;
-    outline: none;
-    margin-right: 8px;
-}
-.btn-group .filter-btn.active,
-.btn-group .filter-btn:focus {
-    background: #78b3ce;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(120,179,206,0.15);
-}
-.btn-group .filter-btn:hover:not(.active) {
-    background: #eaf2f8;
-    color: #78b3ce;
-}
-
 /* Modern filter status dropdown */
+/* Tema 4: filter dropdown dan icon lebih gelap */
+html[data-theme-active="tema4"] .filter-dropdown {
+    background: #221F43 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(19,15,45,0.12) !important;
+}
+html[data-theme-active="tema4"] .dropdown-icon {
+    color: #fff !important;
+}
 .filter-dropdown-wrapper {
     position: relative;
     display: inline-block;

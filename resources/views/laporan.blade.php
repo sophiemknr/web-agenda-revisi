@@ -51,22 +51,20 @@
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="table-white text-center">
+                    <table class="laporan-table log-activity-table">
+                        <thead>
                             <tr>
-                                <th>No</th>
                                 <th>Tanggal</th>
-                                <th>Uraian Kegiatan</th>
+                                <th>Kegiatan</th>
                                 <th>Tempat</th>
-                                <th>Oleh</th>
+                                <th>User</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($agendas as $agenda)
                                 <tr>
-                                    <td class="fw-bold text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($agenda->date)->format('d F Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($agenda->date)->format('d/m/Y H:i') }}</td>
                                     <td>{{ $agenda->title }}</td>
                                     <td>{{ $agenda->tempat }}</td>
                                     <td>{{ $agenda->user->name ?? 'N/A' }}</td>
@@ -76,8 +74,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">Tidak ada data untuk ditampilkan.
-                                    </td>
+                                    <td colspan="5" class="text-center">Tidak ada data untuk ditampilkan.</td>
                                 </tr>
                             @endforelse
                         </tbody>

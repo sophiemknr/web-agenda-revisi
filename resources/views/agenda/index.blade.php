@@ -14,9 +14,13 @@
             <h2>Kalender</h2>
             <div class="calendar">
                 <div class="header">
-                    <div id="prev" class="btn"><i class="fa-solid fa-arrow-left"></i></div>
+                    <div id="prev" class="btn calendar-arrow">
+                        <ion-icon name="chevron-back-circle" class="calendar-chevron"></ion-icon>
+                    </div>
                     <div id="month-year" tabindex="0"></div>
-                    <div id="next" class="btn"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div id="next" class="btn calendar-arrow">
+                        <ion-icon name="chevron-forward-circle" class="calendar-chevron"></ion-icon>
+                    </div>
                 </div>
                 <div class="weekdays">
                     <div>Sen</div>

@@ -46,8 +46,8 @@
                     <div class="theme-preview">
                         <div class="color-box" style="background-color: #14213D;"></div>
                         <div class="color-box" style="background-color: #4A90E2;"></div>
-                        <div class="color-box" style="background-color: #E5E5E5;"></div>
-                        <div class="color-box" style="background-color: #F0F4F8;"></div>
+                        <div class="color-box" style="background-color: #221F43;"></div>
+                        <div class="color-box" style="background-color: #19133B;"></div>
                     </div>
                     <p class="theme-name">Tema 4</p>
                 </div>
