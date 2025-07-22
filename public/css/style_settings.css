@@ -58,3 +58,11 @@
     font-weight: 600;
     color: var(--black);
 }
+
+html[data-theme-active="tema4"] .settings-card{
+    background: var(--primary) !important;
+    background-color: var(--primary) !important;
+}
+html[data-theme-active="tema4"] .theme-name{
+    color: #fff !important;
+}

@@ -68,6 +68,16 @@
 
 @push('styles')
     <style>
+        html[data-theme-active="tema4"] .agenda-input {
+            border: 1px solid #fff !important;
+            color: #fff !important;
+            background: #23234a !important;
+        }
+
+        html[data-theme-active="tema4"] .agenda-label {
+            color: #fff !important;
+        }
+
         .form-container {
             max-width: 600px;
             background-color: #f8f9fa;

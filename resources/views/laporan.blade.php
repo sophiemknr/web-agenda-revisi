@@ -10,7 +10,8 @@
             <div class="bg-white p-4 rounded-3 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Filter Laporan</h5>
-                    <button class="btn fw-bold" style="background-color: #F96E2A; color: #ffffff;" onclick="window.print()">
+                    <button class="btn fw-bold" style="background-color: var(--secondary); color: #ffffff;"
+                        onclick="window.print()">
                         <ion-icon name="print"></ion-icon> <span>Print PDF</span>
                     </button>
                 </div>
@@ -21,8 +22,8 @@
                         <input type="date" id="tanggal-awal" name="tanggal_awal" class="form-control"
                             value="{{ request('tanggal_awal') }}">
                     </div>
-                    <span class="px-3 py-1 fw-bold rounded align-self-end"
-                        style="background-color: #78B3CE; color: #FFFFFF;">s/d</span>
+                    <span class="px-3 py-1 fw-bold rounded align-self-end s-d-span"
+                        style="background-color: var(--primary); color: #FFFFFF;">s/d</span>
                     <div class="form-group">
                         <label for="tanggal-akhir">Tanggal Akhir</label>
                         <input type="date" id="tanggal-akhir" name="tanggal_akhir" class="form-control"
@@ -47,7 +48,8 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary align-self-end">Filter</button>
+                    <button type="submit" class="btn fw-bold align-self-end"
+                        style="background-color: var(--secondary); color: #fff;">Filter</button>
                 </form>
 
                 <div class="table-responsive">
@@ -87,6 +89,15 @@
 
 @push('styles')
     <style>
+        html[data-theme-active="tema4"] .s-d-span {
+            background-color: var(--tertiary) !important;
+            color: #fff !important;
+        }
+
+        html[data-theme-active="tema4"] .form-control[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(38%) sepia(98%) saturate(1200%) hue-rotate(180deg) brightness(1.1);
+        }
+
         .badge.bg-draft {
             background-color: #007bff;
         }

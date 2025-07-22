@@ -50,7 +50,8 @@
                         </select>
                         <span class="dropdown-icon"
                             style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;">
-                            <ion-icon name="chevron-down-outline" style="font-size: 1.3em; color: #686868;"></ion-icon>
+                            <ion-icon name="chevron-down-outline"
+                                style="font-size: 1.3em; color: var(--secondary);"></ion-icon>
                         </span>
                     </div>
                     <div class="filter-btn-group" style="display:none;">

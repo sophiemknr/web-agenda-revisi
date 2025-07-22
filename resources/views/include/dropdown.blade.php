@@ -1,4 +1,11 @@
 <style>
+    html[data-theme-active="tema4"] .dropdown-content {
+        border: 1px solid#fff !important;
+        background-color: #19133B !important;
+        color: #fff !important;
+    }
+
+
     .dropdown-content {
         display: none;
         position: absolute;
