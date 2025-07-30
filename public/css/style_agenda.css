@@ -1,4 +1,28 @@
-/* Kalender arrow ionicons warna secondary dan hover lebih muda tiap tema */
+/* Picker bulan-tahun: button dan background sesuai tema */
+#apply-month-year {
+    background: var(--secondary);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+html[data-theme-active="tema4"] #month-year-picker {
+    background: #181828 !important;
+    color: #fff !important;
+}
+html[data-theme-active="tema4"] #month-year-picker select,
+html[data-theme-active="tema4"] #month-year-picker option {
+    background: #181828 !important;
+    color: #fff !important;
+}
+#apply-month-year {
+    background: var(--secondary) !important;
+    color: #fff !important;
+}
+
 .calendar-chevron {
     font-size: 2.2em;
     vertical-align: middle;
@@ -30,11 +54,20 @@ html[data-theme-active="tema4"] .calendar-arrow:hover .calendar-chevron {
 html[data-theme-active="tema4"] .calendar-arrow i {
     color: #fff !important;
 }
+html[data-theme-active="tema4"] .days .has-agenda {
+    background-color: var(--secondary) !important;
+    color: #fff !important;
+}
 html[data-theme-active="tema4"] .days .today:hover,
 html[data-theme-active="tema4"] .days .has-agenda:hover {
     background-color: #221F43 !important;
     color: #fff !important;
 }
+html[data-theme-active="tema4"] .days .today {
+    background-color: #002d7b !important;
+    color: #fff !important;
+}
+
 /* Responsive Styles for Agenda Page */
 @media (max-width: 992px) {
   .cards {
@@ -349,10 +382,6 @@ html[data-theme-active="tema4"] .days div:hover {
     color: black !important;
 }
 
-html[data-theme-active="tema4"] .days .today {
-    background-color: var(--secondary) !important;
-    color: #fff !important;
-}
 .days .today {
     background-color: var(--secondary);
     color: white;

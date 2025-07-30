@@ -15,6 +15,7 @@ Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5
 
 // Rute yang Membutuhkan Autentikasi
 Route::middleware(['auth'])->group(function () {
+    Route::get('/laporan-pdf', [AgendaController::class, 'laporanPdf'])->name('laporan.pdf');
     Route::get('/dashboard', [AgendaController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -31,8 +32,6 @@ Route::middleware(['auth'])->group(function () {
     // Laporan
     Route::get('/laporan', [AgendaController::class, 'laporan'])->name('laporan');
 
-    // Halaman Statis
-    Route::view('/editprofile', 'editprofile')->name('editprofile');
     Route::view('/settings', 'settings')->name('settings');
 
     // API

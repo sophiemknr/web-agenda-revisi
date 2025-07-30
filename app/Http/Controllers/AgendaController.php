@@ -12,6 +12,36 @@ use App\Traits\LogActivity;
 
 class AgendaController extends Controller
 {
+
+    public function laporanPdf(Request $request)
+    {
+        $query = Agenda::with('user')->orderBy('date', 'desc');
+        if ($request->filled('tanggal_awal')) {
+            $query->where('date', '>=', $request->tanggal_awal);
+        }
+        if ($request->filled('tanggal_akhir')) {
+            $query->where('date', '<=', $request->tanggal_akhir);
+        }
+        if ($request->filled('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+        $agendas = $query->get();
+
+        // TCPDF logic
+        require_once(base_path('vendor/tecnickcom/tcpdf/tcpdf.php'));
+        $pdf = new \TCPDF();
+        $pdf->SetCreator('webagendawalkot');
+        $pdf->SetAuthor('webagendawalkot');
+        $pdf->SetTitle('Laporan Agenda');
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();
+
+        $html = view('laporan_pdf', compact('agendas'))->render();
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output('laporan_agenda_' . now()->format('Ymd_His') . '.pdf', 'I');
+        exit;
+    }
+    use LogActivity;
     use LogActivity;
 
     public function create()
@@ -26,67 +56,21 @@ class AgendaController extends Controller
             return response()->json(['error' => 'Year parameter is required'], 400);
         }
 
-        $apiKey = env('CALENDARIFIC_API_KEY');
-        $country = 'ID';
-        $url = "https://calendarific.com/api/v2/holidays?api_key={$apiKey}&country={$country}&year={$year}";
+        $url = "https://api-harilibur.vercel.app/api?year={$year}";
 
         try {
             $client = new \GuzzleHttp\Client();
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
 
-            $translationMap = [
-                "New Year's Day" => "Tahun Baru Masehi",
-                "Good Friday" => "Wafat Yesus Kristus",
-                "International Workers' Day" => "Hari Buruh Internasional",
-                "Ascension Day of Jesus Christ" => "Kenaikan Yesus Kristus",
-                "Joint Holiday after Ascension Day" => "Cuti Bersama Kenaikan Yesus Kristus",
-                "Vesak Day" => "Hari Raya Waisak",
-                "Pancasila Day" => "Hari Lahir Pancasila",
-                "Idul Adha" => "Hari Raya Idul Adha",
-                "Joint Holiday for Idul Adha" => "Cuti Bersama Hari Raya Idul Adha",
-                "Ascension of the Prophet Muhammad" => "Isra Mi'raj Nabi Muhammad SAW",
-                "Chinese New Year Joint Holiday" => "Cuti Bersama Tahun Baru Imlek",
-                "Chinese New Year's Day" => "Tahun Baru Imlek",
-                "Ramadan Start" => "Awal Bulan Ramadhan",
-                "Joint Holiday for Bali's Day of Silence and Hindu New Year (Nyepi)" => "Cuti Bersama Hari Suci Nyepi (Tahun Baru Saka)",
-                "Bali's Day of Silence and Hindu New Year (Nyepi)" => "Hari Suci Nyepi (Tahun Baru Saka)",
-                "Idul Fitri" => "Hari Raya IdulFitri",
-                "Idul Fitri Holiday" => "Hari Raya IdulFitri",
-                "Idul Fitri Joint Holiday" => "Cuti Bersama Hari Raya IdulFitri",
-                "Easter Sunday" => "Hari Paskah",
-                "International Labor Day" => "Hari Buruh Internasional",
-                "Waisak Day (Buddha's Anniversary)" => "Hari Raya Waisak",
-                "Joint Holiday for Waisak Day" => "Cuti Bersama Hari Raya Waisak",
-                "Muharram / Islamic New Year" => "Satu Muharram/Tahun Baru Hijriah",
-                "Indonesian Independence Day" => "Hari Proklamasi Kemerdekaan Republik Indonesia",
-                "Maulid Nabi Muhammad (The Prophet Muhammad's Birthday)" => "Maulid Nabi Muhammad SAW",
-                "Christmas Eve" => "Malam Natal",
-                "Christmas Day" => "Hari Raya Natal",
-                "Boxing Day" => "Cuti Bersama Natal",
-                "New Year's Eve" => "Malam Tahun Baru",
-            ];
-
-            if (isset($data['response']['holidays'])) {
-                $holidays = [];
-                foreach ($data['response']['holidays'] as $holiday) {
-                    $hinduHolidays = ["Maha Shivaratri", "Holi", "Raksha Bandhan", "Janmashtami", "Ganesh Chaturthi", "Navaratri", "Dussehra", "Diwali"];
-                    if (in_array($holiday['name'], $hinduHolidays)) {
-                        continue;
-                    }
-                    $name = $holiday['name'];
-                    if (isset($translationMap[$name])) {
-                        $name = $translationMap[$name];
-                    }
-                    $holidays[] = [
-                        'date' => $holiday['date']['iso'],
-                        'name' => $name,
-                    ];
-                }
-                return response()->json($holidays);
-            } else {
-                return response()->json(['error' => 'No holidays found'], 404);
+            $holidays = [];
+            foreach ($data as $holiday) {
+                $holidays[] = [
+                    'date' => $holiday['holiday_date'],
+                    'name' => $holiday['holiday_name'],
+                ];
             }
+            return response()->json($holidays);
         } catch (\Exception $e) {
             Log::error('Error fetching holidays: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch holidays'], 500);
@@ -309,6 +293,22 @@ class AgendaController extends Controller
     {
         $query = Agenda::with('user')->orderBy('date', 'desc');
 
+        // Search
+        $search = $request->input('log_search', '');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                    ->orWhere('tempat', 'like', "%$search%")
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('name', 'like', "%$search%");
+                    });
+            });
+        }
+
+        // Show entries per page
+        $show = (int) $request->input('log_show', 10);
+        if (!in_array($show, [5, 10, 25, 50, 100])) $show = 10;
+
         if ($request->filled('tanggal_awal')) {
             $query->where('date', '>=', $request->tanggal_awal);
         }
@@ -321,9 +321,9 @@ class AgendaController extends Controller
             $query->where('status', $request->status);
         }
 
-        $agendas = $query->get();
+        $agendas = $query->paginate($show)->appends($request->except('page'));
 
-        return view('laporan', compact('agendas'));
+        return view('laporan', compact('agendas', 'show', 'search'));
     }
 
     public function getAgendasForMonth(Request $request)

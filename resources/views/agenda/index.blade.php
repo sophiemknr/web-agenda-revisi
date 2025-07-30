@@ -13,23 +13,49 @@
         <div style="width: 50%;">
             <h2>Kalender</h2>
             <div class="calendar">
-                <div class="header">
+                <div class="header" style="position:relative;">
                     <div id="prev" class="btn calendar-arrow">
                         <ion-icon name="chevron-back-circle" class="calendar-chevron"></ion-icon>
                     </div>
-                    <div id="month-year" tabindex="0"></div>
+                    <div id="month-year" tabindex="0" style="cursor:pointer; position:relative;"></div>
+                    <div id="month-year-picker"
+                        style="display:none; position:absolute; background:#fff; color:#000; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); padding:16px; z-index:10; min-width:220px; left:50%; transform:translateX(-50%); top:calc(100% + 8px);">
+                        <div style="display:flex; gap:8px; justify-content:center;">
+                            <select id="month-picker"
+                                style="background:#fff; color:#000; border:none; font-size:1rem; padding:4px 8px; border-radius:4px;">
+                                <option value="0">Januari</option>
+                                <option value="1">Februari</option>
+                                <option value="2">Maret</option>
+                                <option value="3">April</option>
+                                <option value="4">Mei</option>
+                                <option value="5">Juni</option>
+                                <option value="6">Juli</option>
+                                <option value="7">Agustus</option>
+                                <option value="8">September</option>
+                                <option value="9">Oktober</option>
+                                <option value="10">November</option>
+                                <option value="11">Desember</option>
+                            </select>
+                            <select id="year-picker"
+                                style="background:#fff; color:#000; border:none; font-size:1rem; padding:4px 8px; border-radius:4px;"></select>
+                        </div>
+                        <div style="text-align:center; margin-top:12px;">
+                            <button id="apply-month-year"
+                                style="background:#000; color:#fff; border:none; border-radius:4px; padding:4px 16px; font-weight:bold; cursor:pointer;">Terapkan</button>
+                        </div>
+                    </div>
                     <div id="next" class="btn calendar-arrow">
                         <ion-icon name="chevron-forward-circle" class="calendar-chevron"></ion-icon>
                     </div>
                 </div>
                 <div class="weekdays">
-                    <div>Sen</div>
-                    <div>Sel</div>
-                    <div>Rab</div>
-                    <div>Kam</div>
-                    <div>Jum</div>
-                    <div class="red">Sab</div>
-                    <div class="red">Min</div>
+                    <div>Senin</div>
+                    <div>Selasa</div>
+                    <div>Rabu</div>
+                    <div>Kamis</div>
+                    <div>Jumat</div>
+                    <div class="red">Sabtu</div>
+                    <div class="red">Minggu</div>
                 </div>
                 <div class="days" id="days"></div>
             </div>

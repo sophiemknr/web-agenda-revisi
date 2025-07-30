@@ -1,6 +1,6 @@
-@extends('layouts.app', ['pageTitle' => 'New'])
+@extends('layouts.app', ['pageTitle' => 'Tambah Agenda'])
 
-@section('title', 'New')
+@section('title', 'Tambah Agenda')
 
 @section('content')
     <h2 class="text-center fw-bold mt-4">Tambah Agenda</h2>

@@ -16,7 +16,7 @@
 
         <a href="{{ route('laporan', ['status' => 'draft', 'tanggal_awal' => $startDate, 'tanggal_akhir' => $endDate]) }}"
             style="text-decoration: none; color: inherit;">
-            <div class="card">
+            <div class="card" data-status="draft">
                 <div>
                     <div class="numbers">{{ $draftCount }}</div>
                     <div class="cardName">Draft</div>
@@ -26,7 +26,7 @@
         </a>
         <a href="{{ route('laporan', ['status' => 'tentative', 'tanggal_awal' => $startDate, 'tanggal_akhir' => $endDate]) }}"
             style="text-decoration: none; color: inherit;">
-            <div class="card">
+            <div class="card" data-status="tentative">
                 <div>
                     <div class="numbers">{{ $tentativeCount }}</div>
                     <div class="cardName">Tentative</div>
@@ -36,7 +36,7 @@
         </a>
         <a href="{{ route('laporan', ['status' => 'confirm', 'tanggal_awal' => $startDate, 'tanggal_akhir' => $endDate]) }}"
             style="text-decoration: none; color: inherit;">
-            <div class="card">
+            <div class="card" data-status="confirm">
                 <div>
                     <div class="numbers">{{ $confirmCount }}</div>
                     <div class="cardName">Confirm</div>
@@ -46,7 +46,7 @@
         </a>
         <a href="{{ route('laporan', ['status' => 'cancel', 'tanggal_awal' => $startDate, 'tanggal_akhir' => $endDate]) }}"
             style="text-decoration: none; color: inherit;">
-            <div class="card">
+            <div class="card" data-status="cancel">
                 <div>
                     <div class="numbers">{{ $cancelCount }}</div>
                     <div class="cardName">Cancel</div>
@@ -56,7 +56,7 @@
         </a>
         <a href="{{ route('laporan', ['status' => 'reschedule', 'tanggal_awal' => $startDate, 'tanggal_akhir' => $endDate]) }}"
             style="text-decoration: none; color: inherit;">
-            <div class="card">
+            <div class="card" data-status="reschedule">
                 <div>
                     <div class="numbers">{{ $rescheduleCount }}</div>
                     <div class="cardName">Reschedule</div>
@@ -120,8 +120,32 @@
                         {{-- Previous Page --}}
                         <a href="{{ $logs->previousPageUrl() ?? '#' }}"
                             @if ($logs->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;</a>
-                        {{-- Current Page --}}
-                        <a href="#" class="active">{{ $logs->currentPage() }}</a>
+                        {{-- Dynamic numbered pages --}}
+                        @php
+                            $current = $logs->currentPage();
+                            $last = $logs->lastPage();
+                            $pages = [];
+                            if ($last <= 3) {
+                                for ($i = 1; $i <= $last; $i++) {
+                                    $pages[] = $i;
+                                }
+                            } else {
+                                if ($current == 1) {
+                                    $pages = [1, 2, 3];
+                                } elseif ($current == $last) {
+                                    $pages = [$last - 2, $last - 1, $last];
+                                } else {
+                                    $pages = [$current - 1, $current, $current + 1];
+                                }
+                            }
+                        @endphp
+                        @foreach ($pages as $page)
+                            @if ($page == $current)
+                                <a href="#" class="active">{{ $page }}</a>
+                            @else
+                                <a href="{{ $logs->url($page) }}">{{ $page }}</a>
+                            @endif
+                        @endforeach
                         {{-- Next Page --}}
                         <a href="{{ $logs->nextPageUrl() ?? '#' }}"
                             @if (!$logs->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;</a>

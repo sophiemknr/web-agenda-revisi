@@ -28,26 +28,66 @@
                         <div class="form-group">
                             <label class="form-label">Password</label>
                             <div class="user-input-group">
-                                <input type="password" class="user-input" name="password" id="passwordInput"
-                                    placeholder="*isi jika ingin diubah" autocomplete="off">
+                                <input type="password" class="user-input input" name="password" id="password-hints"
+                                    placeholder="*isi jika ingin diubah" autocomplete="off" aria-autocomplete="list"
+                                    aria-label="Password" aria-describedby="passwordHelp">
                                 <span class="toggle-password user-eye" id="togglePassword">
                                     <ion-icon name="eye-off" id="eye-icon"></ion-icon>
                                 </span>
                             </div>
-                            <small class="user-desc">Password minimal 8 karakter, harus ada huruf besar, huruf kecil, angka,
-                                dan simbol.</small>
+                            <div data-strong-password='{"target": "#password-hints", "hints": "#password-hints-content", "stripClasses": "strong-password:bg-primary strong-password-accepted:bg-teal-500 h-1.5 flex-auto bg-neutral/20"}'
+                                class="rounded-full overflow-hidden mt-2 flex gap-0.5 password-meter">
+                            </div>
+                            <div id="password-hints-content" class="mb-3">
+                                <style>
+                                    [data-theme-active="tema4"] #password-hints-content,
+                                    [data-theme-active="tema4"] #password-hints-content * {
+                                        color: #fff !important;
+                                    }
+                                </style>
+                                <div>
+                                    <span data-pw-strength-hint='["Kosong", "Lemah", "Sedang", "Kuat", "Sangat Kuat"]'
+                                        class="text-base-content text-sm font-semibold"></span>
+                                </div>
+                                <h6 class="my-2 text-base font-semibold text-base-content">Password harus berisi:</h6>
+                                <ul class="text-base-content/80 space-y-1 text-sm">
+                                    <li data-pw-strength-rule="min-length"
+                                        class="strong-password-active:text-success flex items-center gap-x-2">
+                                        <span class="icon-[tabler--circle-check] hidden size-5 shrink-0" data-check></span>
+                                        <span class="icon-[tabler--circle-x] hidden size-5 shrink-0" data-uncheck></span>
+                                        Minimal karakter 8.
+                                    </li>
+                                    <li data-pw-strength-rule="uppercase"
+                                        class="strong-password-active:text-success flex items-center gap-x-2">
+                                        <span class="icon-[tabler--circle-check] hidden size-5 shrink-0" data-check></span>
+                                        <span class="icon-[tabler--circle-x] hidden size-5 shrink-0" data-uncheck></span>
+                                        Harus menyertakan huruf kapital.
+                                    </li>
+                                    <li data-pw-strength-rule="numbers"
+                                        class="strong-password-active:text-success flex items-center gap-x-2">
+                                        <span class="icon-[tabler--circle-check] hidden size-5 shrink-0" data-check></span>
+                                        <span class="icon-[tabler--circle-x] hidden size-5 shrink-0" data-uncheck></span>
+                                        Harus menyertakan angka.
+                                    </li>
+                                    <li data-pw-strength-rule="special-characters"
+                                        class="strong-password-active:text-success flex items-center gap-x-2">
+                                        <span class="icon-[tabler--circle-check] hidden size-5 shrink-0" data-check></span>
+                                        <span class="icon-[tabler--circle-x] hidden size-5 shrink-0" data-uncheck></span>
+                                        Harus menyertakan karakter spesial.
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="form-group" style="margin-top:15px;">
                             <label class="form-label">Konfirmasi Password</label>
                             <div class="user-input-group">
-                                <input type="password" class="user-input" name="password_confirmation"
+                                <input type="password" class="user-input input" name="password_confirmation"
                                     id="passwordConfirmInput" autocomplete="off">
                                 <span class="toggle-password user-eye" id="togglePasswordConfirm">
                                     <ion-icon name="eye-off" id="eye-icon-confirm"></ion-icon>
                                 </span>
                             </div>
-                            <small class="user-desc">Password minimal 8 karakter, harus ada huruf besar, huruf kecil, angka,
-                                dan simbol.</small>
+                            <div id="password-match-message" class="mt-2" style="font-size:0.95em;font-weight:500;"></div>
                         </div>
                         <div class="form-group" style="margin-top:15px;">
                             <label class="form-label">Level</label>
@@ -61,7 +101,8 @@
                             </select>
                         </div>
                         <div class="user-btn-group">
-                            <button type="submit" class="user-btn user-btn-save"><i class="fas fa-save"></i> Save</button>
+                            <button type="submit" class="user-btn user-btn-save"><i class="fas fa-save"></i>
+                                Save</button>
                             <a href="{{ route('user') }}" class="user-btn user-btn-reset">Reset</a>
                         </div>
                     </form>
@@ -173,6 +214,13 @@
 
         html[data-theme-active="tema4"] .user-input {
             border: 1px solid #fff !important;
+        }
+
+        html[data-theme-active="tema4"] .password-hints-content,
+        html[data-theme-active="tema4"] .password-hints-content h6,
+        html[data-theme-active="tema4"] .password-hints-content ul,
+        html[data-theme-active="tema4"] .password-hints-content li {
+            color: #fff !important;
         }
 
         html[data-theme-active="tema4"] .user-card {
@@ -365,6 +413,7 @@
         }
 
         .user-btn-reset {
+            text-decoration: none !important;
             background: var(--primary, #3498fd);
             color: #fff;
         }
@@ -484,34 +533,180 @@
         .icon-delete:hover {
             color: #f97979 !important;
         }
+
+        .password-meter {
+            display: flex;
+            height: 6px;
+            margin-top: 10px;
+        }
+
+        .password-meter .strong-password {
+            background-color: #ddd;
+            flex: 1;
+            margin-right: 2px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .strong-password.lemah {
+            background-color: #ff4d4d !important;
+        }
+
+        .strong-password.sedang {
+            background-color: #ff9800 !important;
+        }
+
+        .strong-password.kuat {
+            background-color: #ffe066 !important;
+        }
+
+        .strong-password.sangat-kuat {
+            background-color: #009900 !important;
+        }
     </style>
 @endpush
 
 @push('scripts')
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('passwordInput');
-            const eyeIcon = document.getElementById('eye-icon');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.setAttribute('name', 'eye');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.setAttribute('name', 'eye-off');
+        // Toggle password eye
+        const passwordInput = document.getElementById('password-hints');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eye-icon');
+        if (togglePassword && passwordInput && eyeIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                eyeIcon.setAttribute('name', type === 'password' ? 'eye-off' : 'eye');
+            });
+        }
+        const confirmInput = document.getElementById('passwordConfirmInput');
+        const toggleConfirm = document.getElementById('togglePasswordConfirm');
+        const eyeIconConfirm = document.getElementById('eye-icon-confirm');
+        const matchMsg = document.getElementById('password-match-message');
+        if (toggleConfirm && confirmInput && eyeIconConfirm) {
+            toggleConfirm.addEventListener('click', function() {
+                const type = confirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmInput.setAttribute('type', type);
+                eyeIconConfirm.setAttribute('name', type === 'password' ? 'eye-off' : 'eye');
+            });
+        }
+
+        function checkPasswordMatch() {
+            if (!confirmInput.value) {
+                matchMsg.textContent = '';
+                matchMsg.style.color = '';
+                return;
             }
-        });
-        document.getElementById('togglePasswordConfirm').addEventListener('click', function() {
-            const passwordField = document.getElementById('passwordConfirmInput');
-            const eyeIcon = document.getElementById('eye-icon-confirm');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.setAttribute('name', 'eye');
+            if (confirmInput.value === passwordInput.value) {
+                matchMsg.textContent = 'Password sesuai';
+                matchMsg.style.color = '#28a745';
             } else {
-                passwordField.type = 'password';
-                eyeIcon.setAttribute('name', 'eye-off');
+                matchMsg.textContent = 'Password tidak sesuai';
+                matchMsg.style.color = '#dc3545';
             }
-        });
+        }
+        if (confirmInput && passwordInput) {
+            confirmInput.addEventListener('input', checkPasswordMatch);
+            passwordInput.addEventListener('input', checkPasswordMatch);
+        }
+        // Password strength logic
+        const hintContent = document.getElementById('password-hints-content');
+        const hintLevel = hintContent.querySelector('[data-pw-strength-hint]');
+        const rules = hintContent.querySelectorAll('[data-pw-strength-rule]');
+        const meter = document.querySelector('.password-meter');
+
+        function checkRule(rule, val) {
+            switch (rule) {
+                case 'min-length':
+                    return val.length >= 8;
+                case 'uppercase':
+                    return /[A-Z]/.test(val);
+                case 'numbers':
+                    return /\d/.test(val);
+                case 'special-characters':
+                    return /[^A-Za-z0-9]/.test(val);
+                default:
+                    return false;
+            }
+        }
+
+        function getStrength(val) {
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/\d/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            return score;
+        }
+
+        function getBarClass(score, i) {
+            // i: 1-based index (left to right)
+            if (score === 4 && i <= 4) return 'sangat-kuat';
+            if (score === 3 && i <= 3) return 'kuat';
+            if (score === 2 && i <= 2) return 'sedang';
+            if (score === 1 && i <= 1) return 'lemah';
+            return '';
+        }
+
+        function updateStrength() {
+            const val = passwordInput.value;
+            let score = getStrength(val);
+            // Level text
+            const levels = ["Kosong", "Lemah", "Sedang", "Kuat", "Sangat Kuat"];
+            let levelIdx = 0;
+            if (val.length === 0) levelIdx = 0;
+            else if (score === 1) levelIdx = 1;
+            else if (score === 2) levelIdx = 2;
+            else if (score === 3) levelIdx = 3;
+            else if (score === 4) levelIdx = 4;
+            hintLevel.textContent = levels[levelIdx];
+            // Rules
+            rules.forEach(rule => {
+                const ruleName = rule.getAttribute('data-pw-strength-rule');
+                if (checkRule(ruleName, val)) {
+                    rule.classList.add('text-success');
+                } else {
+                    rule.classList.remove('text-success');
+                }
+            });
+            // Meter
+            meter.innerHTML = '';
+            for (let i = 1; i <= 4; i++) {
+                let bar = document.createElement('div');
+                bar.className = 'strong-password';
+                const barClass = getBarClass(score, i);
+                if (barClass) bar.classList.add(barClass);
+                meter.appendChild(bar);
+            }
+        }
+        if (passwordInput) passwordInput.addEventListener('input', updateStrength);
+
+        const userForm = document.querySelector('form[action*="user"]');
+
+        function isPasswordValid(val) {
+            return val.length >= 8 && /[a-z]/.test(val) && /[A-Z]/.test(val) && /\d/.test(val) && /[^A-Za-z0-9]/.test(val);
+        }
+        if (userForm && passwordInput && confirmInput) {
+            userForm.addEventListener('submit', function(e) {
+                const pass = passwordInput.value;
+                const conf = confirmInput.value;
+                if (pass || conf) { // Only validate if user tries to set/change password
+                    if (!isPasswordValid(pass)) {
+                        e.preventDefault();
+                        toastr.error(
+                            'Password tidak valid. Minimal 8 karakter, huruf besar, huruf kecil, angka, dan simbol.'
+                        );
+                        return false;
+                    }
+                    if (pass !== conf) {
+                        e.preventDefault();
+                        toastr.error('Konfirmasi password tidak sesuai.');
+                        return false;
+                    }
+                }
+            });
+        }
     </script>
 @endpush

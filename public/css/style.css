@@ -1,3 +1,20 @@
+/* Dashboard Card Status Custom Colors */
+.cardBox .card[data-status="draft"] .iconBox { color: #3498fd !important; }
+.cardBox .card[data-status="tentative"] .iconBox { color: #ff9800 !important; }
+.cardBox .card[data-status="confirm"] .iconBox { color: #28a745 !important; }
+.cardBox .card[data-status="cancel"] .iconBox { color: #dc3545 !important; }
+.cardBox .card[data-status="reschedule"] .iconBox { color: #FFD43B !important; }
+
+.cardBox .card[data-status="draft"]:hover { background: #3498fd !important; }
+.cardBox .card[data-status="tentative"]:hover { background: #ff9800 !important; }
+.cardBox .card[data-status="confirm"]:hover { background: #28a745 !important; }
+.cardBox .card[data-status="cancel"]:hover { background: #dc3545 !important; }
+.cardBox .card[data-status="reschedule"]:hover { background: #FFD43B !important; }
+.cardBox .card[data-status]:hover .iconBox,
+.cardBox .card[data-status]:hover .numbers,
+.cardBox .card[data-status]:hover .cardName {
+    color: #fff !important;
+}
 @media (max-width: 992px) {
   .agenda-form-card {
     padding: 18px 8px;
@@ -162,10 +179,7 @@ html[data-theme-active="tema4"] .agenda-item {
     margin-bottom: 16px;
     padding: 18px 20px;
 }
-/* Card status hover khusus tema 4: background secondary, icon & text putih */
-html[data-theme-active="tema4"] .cardBox .card:hover {
-    background: var(--secondary) !important;
-}
+
 html[data-theme-active="tema4"] .cardBox .card:hover .numbers,
 html[data-theme-active="tema4"] .cardBox .card:hover .cardName,
 html[data-theme-active="tema4"] .cardBox .card:hover .iconBox {

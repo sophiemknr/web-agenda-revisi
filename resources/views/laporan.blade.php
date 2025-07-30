@@ -10,10 +10,10 @@
             <div class="bg-white p-4 rounded-3 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Filter Laporan</h5>
-                    <button class="btn fw-bold" style="background-color: var(--secondary); color: #ffffff;"
-                        onclick="window.print()">
+                    <a href="{{ route('laporan.pdf', request()->all()) }}" target="_blank" class="btn fw-bold"
+                        style="background-color: var(--secondary); color: #ffffff;">
                         <ion-icon name="print"></ion-icon> <span>Print PDF</span>
-                    </button>
+                    </a>
                 </div>
 
                 <form method="GET" action="{{ route('laporan') }}" class="d-flex flex-wrap align-items-center gap-3 mb-4">
@@ -52,6 +52,23 @@
                         style="background-color: var(--secondary); color: #fff;">Filter</button>
                 </form>
 
+                <form method="GET" class="d-flex flex-wrap align-items-center mb-3" style="gap: 10px;">
+                    <label for="log_show" class="form-label mb-0">Show
+                        <select name="log_show" id="log_show" class="form-select d-inline-block w-auto"
+                            onchange="this.form.submit()">
+                            @foreach ([5, 10, 25, 50, 100] as $opt)
+                                <option value="{{ $opt }}" {{ isset($show) && $show == $opt ? 'selected' : '' }}>
+                                    {{ $opt }}
+                                </option>
+                            @endforeach
+                        </select>
+                        entries
+                    </label>
+                    <input type="text" name="log_search" value="{{ isset($search) ? $search : '' }}"
+                        class="form-control w-auto" placeholder="Cari aktivitas/user..." style="min-width:180px;" />
+                    <button type="submit" class="btn btn-secondary">Cari</button>
+                </form>
+
                 <div class="table-responsive">
                     <table class="laporan-table log-activity-table">
                         <thead>
@@ -66,7 +83,7 @@
                         <tbody>
                             @forelse($agendas as $agenda)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($agenda->date)->format('d/m/Y H:i') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($agenda->date)->format('d/m/Y') }}</td>
                                     <td>{{ $agenda->title }}</td>
                                     <td>{{ $agenda->tempat }}</td>
                                     <td>{{ $agenda->user->name ?? 'N/A' }}</td>
@@ -81,6 +98,68 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="mt-2 d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="log-pagination-info">
+                        @if (
+                            $agendas instanceof \Illuminate\Pagination\LengthAwarePaginator ||
+                                $agendas instanceof \Illuminate\Pagination\Paginator)
+                            Menampilkan {{ $agendas->firstItem() ?? 0 }} - {{ $agendas->lastItem() ?? 0 }} dari
+                            {{ $agendas->total() }} entri
+                        @else
+                            <span class="text-danger">Pagination tidak aktif. Pastikan variabel $agendas di controller
+                                menggunakan paginate().</span>
+                        @endif
+                    </div>
+                    <div style="flex:1;">
+                        @if (
+                            $agendas instanceof \Illuminate\Pagination\LengthAwarePaginator ||
+                                $agendas instanceof \Illuminate\Pagination\Paginator)
+                            <div class="pagination">
+                                {{-- First Page --}}
+                                <a href="{{ $agendas->url(1) }}"
+                                    @if ($agendas->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;&lt;</a>
+                                {{-- Previous Page --}}
+                                <a href="{{ $agendas->previousPageUrl() ?? '#' }}"
+                                    @if ($agendas->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;</a>
+                                {{-- Dynamic numbered pages --}}
+                                @php
+                                    $current = $agendas->currentPage();
+                                    $last = $agendas->lastPage();
+                                    $pages = [];
+                                    if ($last <= 3) {
+                                        for ($i = 1; $i <= $last; $i++) {
+                                            $pages[] = $i;
+                                        }
+                                    } else {
+                                        if ($current == 1) {
+                                            $pages = [1, 2, 3];
+                                        } elseif ($current == $last) {
+                                            $pages = [$last - 2, $last - 1, $last];
+                                        } else {
+                                            $pages = [$current - 1, $current, $current + 1];
+                                        }
+                                    }
+                                @endphp
+                                @foreach ($pages as $page)
+                                    @if ($page == $current)
+                                        <a href="#" class="active">{{ $page }}</a>
+                                    @else
+                                        <a href="{{ $agendas->url($page) }}">{{ $page }}</a>
+                                    @endif
+                                @endforeach
+                                {{-- Next Page --}}
+                                <a href="{{ $agendas->nextPageUrl() ?? '#' }}"
+                                    @if (!$agendas->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;</a>
+                                {{-- Last Page --}}
+                                <a href="{{ $agendas->url($agendas->lastPage()) }}"
+                                    @if (!$agendas->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;&gt;</a>
+                            </div>
+                        @else
+                            <span class="text-danger">Pagination tidak aktif. Pastikan variabel $agendas di controller
+                                menggunakan paginate().</span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,8 +182,7 @@
         }
 
         .badge.bg-tentative {
-            background-color: #ffc107;
-            color: #000 !important;
+            background-color: #ff9800;
         }
 
         .badge.bg-confirm {
@@ -116,7 +194,7 @@
         }
 
         .badge.bg-reschedule {
-            background-color: #fd7e14;
+            background-color: #FFD43B;
         }
     </style>
 @endpush

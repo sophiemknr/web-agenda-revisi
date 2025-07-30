@@ -25,12 +25,6 @@
                     Logout
                 </button>
             </form>
-            <ion-icon name="pencil-outline"></ion-icon>
-            <div class="logout-text" role="menuitem">
-                <a href="editprofile" style="text-decoration: none; color: inherit;">
-                    <span>Edit Profile</span>
-                </a>
-            </div>
         </div>
     </div>
 </div>

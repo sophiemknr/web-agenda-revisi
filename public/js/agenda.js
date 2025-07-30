@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const monthYear = document.getElementById("month-year");
+    const monthYearPicker = document.getElementById("month-year-picker");
+    const monthPicker = document.getElementById("month-picker");
+    const yearPicker = document.getElementById("year-picker");
+    const applyMonthYearBtn = document.getElementById("apply-month-year");
     const daysContainer = document.getElementById("days");
     const prevButton = document.getElementById("prev");
     const nextButton = document.getElementById("next");
@@ -26,6 +30,65 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedStatus = "all";
     let nationalHolidays = {};
     let monthlyAgendas = [];
+
+    // --- MONTH-YEAR PICKER LOGIC ---
+    let monthClicked = false;
+    let yearClicked = false;
+    let pickerOpen = false;
+
+    // Isi tahun picker (range 2015-2030)
+    for (let y = 2015; y <= 2030; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        yearPicker.appendChild(opt);
+    }
+
+    function updateMonthYearText() {
+        monthYear.textContent = `${
+            months[currentDate.getMonth()]
+        } ${currentDate.getFullYear()}`;
+    }
+
+    updateMonthYearText();
+
+    monthYear.addEventListener("click", function (e) {
+        if (!pickerOpen) {
+            openMonthYearPicker();
+        }
+    });
+
+    function openMonthYearPicker() {
+        pickerOpen = true;
+        monthPicker.value = currentDate.getMonth();
+        yearPicker.value = currentDate.getFullYear();
+        monthYearPicker.style.display = "block";
+    }
+    function closeMonthYearPicker() {
+        pickerOpen = false;
+        monthYearPicker.style.display = "none";
+        monthClicked = false;
+        yearClicked = false;
+    }
+    applyMonthYearBtn.addEventListener("click", function () {
+        currentDate = new Date(
+            parseInt(yearPicker.value),
+            parseInt(monthPicker.value),
+            1
+        );
+        updateMonthYearText();
+        renderCalendar(currentDate);
+        closeMonthYearPicker();
+    });
+    document.addEventListener("click", function (e) {
+        if (
+            pickerOpen &&
+            !monthYearPicker.contains(e.target) &&
+            e.target !== monthYear
+        ) {
+            closeMonthYearPicker();
+        }
+    });
 
     // --- HELPER FUNCTIONS ---
 
@@ -239,12 +302,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.documentElement.getAttribute("data-theme-active") ===
                 "tema4";
             if (agendaDates.has(i)) {
+                // Cari status agenda pada tanggal ini
+                const agendaForDay = monthlyAgendas.find(
+                    (a) => a.date === dateStr
+                );
+                let status =
+                    agendaForDay && agendaForDay.status
+                        ? agendaForDay.status.toLowerCase()
+                        : "draft";
                 dayDiv.classList.add("has-agenda");
-                if (isTema4) {
-                    dayDiv.style.backgroundColor = "#383187";
-                    dayDiv.style.color = "#fff";
-                    dayDiv.style.borderRadius = "6px";
-                }
+                dayDiv.setAttribute("data-status", status);
             }
             if (
                 i === today.getDate() &&

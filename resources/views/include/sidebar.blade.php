@@ -45,7 +45,7 @@
                 <span class="icon">
                     <ion-icon name="add-circle"></ion-icon>
                 </span>
-                <span class="title">New</span>
+                <span class="title">Tambah</span>
             </a>
         </li>
 
