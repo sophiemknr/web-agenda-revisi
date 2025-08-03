@@ -4,10 +4,11 @@
 
 @section('content')
     <h2 class="user-header">User</h2>
-    <section class="user-section">
-        <div class="user-card">
-            <div class="user-form-table">
-                <div class="user-form-col">
+    <section class="content mt-4">
+        <div class="container-fluid">
+            <div
+                class="user-main-box bg-white p-4 rounded-3 shadow-sm d-flex flex-row flex-wrap gap-4 user-form-table-responsive align-items-start">
+                <div class="user-form-col flex-grow-1 flex-basis-0" style="min-width:240px;">
                     <form method="POST" action="{{ isset($user) ? route('user.update', $user->id) : route('user.store') }}">
                         @csrf
                         <div class="form-group">
@@ -36,8 +37,7 @@
                                 </span>
                             </div>
                             <div data-strong-password='{"target": "#password-hints", "hints": "#password-hints-content", "stripClasses": "strong-password:bg-primary strong-password-accepted:bg-teal-500 h-1.5 flex-auto bg-neutral/20"}'
-                                class="rounded-full overflow-hidden mt-2 flex gap-0.5 password-meter">
-                            </div>
+                                class="rounded-full overflow-hidden mt-2 flex gap-0.5 password-meter"></div>
                             <div id="password-hints-content" class="mb-3">
                                 <style>
                                     [data-theme-active="tema4"] #password-hints-content,
@@ -101,13 +101,12 @@
                             </select>
                         </div>
                         <div class="user-btn-group">
-                            <button type="submit" class="user-btn user-btn-save"><i class="fas fa-save"></i>
-                                Save</button>
+                            <button type="submit" class="user-btn user-btn-save"><i class="fas fa-save"></i> Save</button>
                             <a href="{{ route('user') }}" class="user-btn user-btn-reset">Reset</a>
                         </div>
                     </form>
                 </div>
-                <div class="user-table-col">
+                <div class="user-table-col flex-grow-1 flex-basis-0" style="min-width:240px;">
                     <table class="user-table">
                         <thead>
                             <tr>
@@ -149,12 +148,107 @@
                 </div>
             </div>
         </div>
+        </div>
+        </div>
     </section>
+
 @endsection
 
 @push('styles')
     <style>
-        /* Tema 1 (Default) */
+        .user-main-box {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+        }
+
+        .user-form-col,
+        .user-table-col {
+            flex: 1 1 0;
+            min-width: 240px;
+            max-width: 100%;
+        }
+
+        .user-form-col form,
+        .user-table-col table {
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .user-main-box {
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .user-main-box {
+                flex-direction: column !important;
+                gap: 18px;
+            }
+
+            .user-form-col,
+            .user-table-col {
+                min-width: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .user-main-box {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .user-main-box {
+                flex-direction: column !important;
+                gap: 18px;
+            }
+        }
+
+        html[data-theme-active="tema4"] .user-main-box {
+            background: var(--primary) !important;
+            color: #fff !important;
+        }
+
+        html[data-theme-active="tema4"] .user-main-box input,
+        html[data-theme-active="tema4"] .user-main-box select,
+        html[data-theme-active="tema4"] .user-main-box textarea {
+            background: var(--tertiary) !important;
+            color: #fff !important;
+            border: 1px solid #383187 !important;
+        }
+
+        html[data-theme-active="tema4"] .user-main-box th,
+        html[data-theme-active="tema4"] .user-main-box td {
+            color: #fff !important;
+        }
+
+        html[data-theme-active="tema4"] .user-form-box,
+        html[data-theme-active="tema4"] .user-table-box {
+            background: var(--primary) !important;
+            color: #fff !important;
+        }
+
+        html[data-theme-active="tema4"] .user-form-box input,
+        html[data-theme-active="tema4"] .user-form-box select,
+        html[data-theme-active="tema4"] .user-form-box textarea {
+            background: var(--tertiary) !important;
+            color: #fff !important;
+            border: 1px solid #383187 !important;
+        }
+
+        html[data-theme-active="tema4"] .user-table-box {
+            background: var(--tertiary) !important;
+        }
+
+        html[data-theme-active="tema4"] .user-table-box th,
+        html[data-theme-active="tema4"] .user-table-box td {
+            color: #fff !important;
+        }
+
+        /* Tema 1 */
         :root {
             --primary: #78B3CE;
             --secondary: #F96E2A;
@@ -165,7 +259,7 @@
             --black: #000000;
         }
 
-        /* Tema 2 (Hijau & Coklat) */
+        /* Tema 2 */
         html[data-theme-active="tema2"] {
             --primary: #A5B68D;
             --secondary: #DA8359;
@@ -173,7 +267,7 @@
             --background: #E7F0DB;
         }
 
-        /* Tema 3 (Merah & Kuning) */
+        /* Tema 3 */
         html[data-theme-active="tema3"] {
             --primary: #A31D1D;
             --secondary: #F29F58;
@@ -181,7 +275,7 @@
             --background: #FFF6D9;
         }
 
-        /* Tema 4 (Biru Tua) */
+        /* Tema 4 */
         html[data-theme-active="tema4"] {
             --primary: #130F2D;
             --secondary: #4477CE;
@@ -200,7 +294,6 @@
             color: #000;
         }
 
-        /* Tema 4: dark background, light text */
         html[data-theme-active="tema4"] .user-header,
         html[data-theme-active="tema4"] .user-table th,
         html[data-theme-active="tema4"] .user-table td,
@@ -246,7 +339,6 @@
             color: #fff !important;
         }
 
-        /* Tema lain: light background, dark text */
         .user-card {
             background: #fff;
             border-radius: 18px;
@@ -317,7 +409,6 @@
             font-size: 1rem;
         }
 
-        /* Perbaiki posisi icon dropdown pada select agar lebih ke kiri */
         .user-input[type='select'],
         select.user-input {
             background-position: right 2.2em center !important;
@@ -346,7 +437,6 @@
             top: 40%;
             transform: translateY(-50%);
             color: var(--secondary);
-            /* default secondary */
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -402,7 +492,6 @@
             transition: background 0.2s;
         }
 
-        /* Button Save = secondary, Button Reset = primary */
         .user-btn-save {
             background: var(--secondary, #4b4b9b);
             color: #fff;
@@ -570,7 +659,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <script>
-        // Toggle password eye
         const passwordInput = document.getElementById('password-hints');
         const togglePassword = document.getElementById('togglePassword');
         const eyeIcon = document.getElementById('eye-icon');
@@ -611,7 +699,6 @@
             confirmInput.addEventListener('input', checkPasswordMatch);
             passwordInput.addEventListener('input', checkPasswordMatch);
         }
-        // Password strength logic
         const hintContent = document.getElementById('password-hints-content');
         const hintLevel = hintContent.querySelector('[data-pw-strength-hint]');
         const rules = hintContent.querySelectorAll('[data-pw-strength-rule]');
@@ -642,7 +729,6 @@
         }
 
         function getBarClass(score, i) {
-            // i: 1-based index (left to right)
             if (score === 4 && i <= 4) return 'sangat-kuat';
             if (score === 3 && i <= 3) return 'kuat';
             if (score === 2 && i <= 2) return 'sedang';
@@ -653,7 +739,6 @@
         function updateStrength() {
             const val = passwordInput.value;
             let score = getStrength(val);
-            // Level text
             const levels = ["Kosong", "Lemah", "Sedang", "Kuat", "Sangat Kuat"];
             let levelIdx = 0;
             if (val.length === 0) levelIdx = 0;
@@ -662,7 +747,6 @@
             else if (score === 3) levelIdx = 3;
             else if (score === 4) levelIdx = 4;
             hintLevel.textContent = levels[levelIdx];
-            // Rules
             rules.forEach(rule => {
                 const ruleName = rule.getAttribute('data-pw-strength-rule');
                 if (checkRule(ruleName, val)) {
@@ -671,7 +755,6 @@
                     rule.classList.remove('text-success');
                 }
             });
-            // Meter
             meter.innerHTML = '';
             for (let i = 1; i <= 4; i++) {
                 let bar = document.createElement('div');
@@ -692,7 +775,7 @@
             userForm.addEventListener('submit', function(e) {
                 const pass = passwordInput.value;
                 const conf = confirmInput.value;
-                if (pass || conf) { // Only validate if user tries to set/change password
+                if (pass || conf) {
                     if (!isPasswordValid(pass)) {
                         e.preventDefault();
                         toastr.error(

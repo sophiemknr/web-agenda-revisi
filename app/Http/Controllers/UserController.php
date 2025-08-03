@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Traits\LogActivity; // Import Trait
+use App\Traits\LogActivity;
 
 class UserController extends Controller
 {
-    use LogActivity; // Gunakan Trait
+    use LogActivity;
 
     public function index()
     {
@@ -38,7 +38,6 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        // Mencatat aktivitas
         $this->addToLog('Membuat user baru: ' . $user->name);
 
         return redirect()->route('user')->with('success', 'User berhasil ditambahkan!');
@@ -81,7 +80,6 @@ class UserController extends Controller
 
         $user->save();
 
-        // Mencatat aktivitas
         $this->addToLog('Memperbarui user: ' . $user->name);
 
         return redirect()->route('user')->with('success', 'User berhasil diperbarui!');
@@ -90,10 +88,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $name = $user->name; // Simpan nama untuk log
+        $name = $user->name;
         $user->delete();
 
-        // Mencatat aktivitas
         $this->addToLog('Menghapus user: ' . $name);
 
         return redirect()->route('user')->with('success', 'User berhasil dihapus!');

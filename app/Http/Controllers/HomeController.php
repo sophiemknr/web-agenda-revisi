@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Helpers\LogActivity;
+use App\Traits\LogActivity;
 
 class HomeController extends Controller
 {
+    use LogActivity;
     /**
      * Create a new controller instance.
      */
@@ -23,7 +24,7 @@ class HomeController extends Controller
      */
     public function myTestAddToLog()
     {
-        LogActivity::addToLog('My Testing Add To Log.');
+        $this->addToLog('My Testing Add To Log.');
         dd('Log inserted successfully.');
     }
 
@@ -34,7 +35,7 @@ class HomeController extends Controller
      */
     public function logActivity(): View
     {
-        $logs = LogActivity::logActivityLists();
+        $logs = $this->logActivityLists();
         return view('logActivity', compact('logs'));
     }
 

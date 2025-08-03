@@ -1,4 +1,105 @@
-/* Dashboard Card Status Custom Colors */
+.agenda-form-box {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-right: auto;
+    margin-left: auto;
+}
+.user-responsive-container {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+.user-form-table {
+  display: flex;
+  gap: 32px;
+}
+.user-form-col, .user-table-col {
+  flex: 1 1 0;
+}
+@media (max-width: 992px) {
+  .user-responsive-container {
+    max-width: 98vw;
+    padding: 0 8px;
+  }
+  .user-form-table {
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .user-responsive-container {
+    max-width: 100vw;
+    padding: 0 2px;
+  }
+  .user-form-table {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container,
+  .agenda-form-card,
+  .main-wrapper,
+  .content-area,
+  .cardBox {
+    max-width: 98vw !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+  }
+  .form-control,
+  .form-select,
+  textarea {
+    font-size: 1em !important;
+    padding: 8px 10px !important;
+  }
+  table {
+    font-size: 0.95em !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+  h2, h1, .fw-bold {
+    font-size: 1.3em !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .container,
+  .agenda-form-card,
+  .main-wrapper,
+  .content-area,
+  .cardBox {
+    max-width: 100vw !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+  }
+  .form-control,
+  .form-select,
+  textarea {
+    font-size: 0.95em !important;
+    padding: 6px 6px !important;
+  }
+  table {
+    font-size: 0.9em !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+  h2, h1, .fw-bold {
+    font-size: 1.1em !important;
+  }
+  .btn, .agenda-btn, .btn-simpan {
+    width: 100% !important;
+    padding: 10px 0 !important;
+    font-size: 1em !important;
+  }
+}
 .cardBox .card[data-status="draft"] .iconBox { color: #3498fd !important; }
 .cardBox .card[data-status="tentative"] .iconBox { color: #ff9800 !important; }
 .cardBox .card[data-status="confirm"] .iconBox { color: #28a745 !important; }
@@ -70,7 +171,6 @@ html[data-theme-active="tema4"] .agenda-form-card .btn-simpan:hover {
     color: #fff;
 }
 
-/* Icon date & time dan button Simpan Agenda warna secondary tiap tema */
 .agenda-input[type="date"]::-webkit-calendar-picker-indicator,
 .agenda-input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0.2);
@@ -83,7 +183,7 @@ html[data-theme-active="tema4"] .agenda-input[type="time"]::-webkit-calendar-pic
     background: var(--secondary);
     color: #fff;
 }
-/* ====== Agenda Form Custom Layout ====== */
+
 .agenda-form-card {
     background: #fff;
     border-radius: 16px;
@@ -164,7 +264,6 @@ html[data-theme-active="tema4"] .btn.btn-secondary:hover {
     background-color: #282057 !important;
     color: #fff !important;
 }
-/* Agenda page tema 4: kalender primary, agenda-item tertiary */
 html[data-theme-active="tema4"] .calendar {
     background: var(--primary) !important;
     background-color: var(--primary) !important;
@@ -185,7 +284,6 @@ html[data-theme-active="tema4"] .cardBox .card:hover .cardName,
 html[data-theme-active="tema4"] .cardBox .card:hover .iconBox {
     color: #fff !important;
 }
-/* Pagination button khusus tema 4: first, prev, next, last background gelap */
 html[data-theme-active="tema4"] .pagination a:not(.active) {
     background: #221F43 !important;
     color: #fff !important;
@@ -198,7 +296,6 @@ html[data-theme-active="tema4"] .pagination a:not(.active):hover {
 html[data-theme-active="tema4"] .log-pagination-info {
     color: #fff !important;
 }
-/* Log Activity Table: Tema 4 text putih, hover secondary */
 html[data-theme-active="tema4"] .log-activity-table th,
 html[data-theme-active="tema4"] .log-activity-table td {
     color: #fff !important;
@@ -206,12 +303,10 @@ html[data-theme-active="tema4"] .log-activity-table td {
 html[data-theme-active="tema4"] .log-activity-table tbody tr:hover {
     background-color: var(--secondary) !important;
 }
-/* Sidebar menu text secondary hanya saat hover/active untuk tema 4 */
 html[data-theme-active="tema4"] .navigation ul li:hover a .title,
 html[data-theme-active="tema4"] .navigation ul li.hovered a .title {
     color: var(--secondary) !important;
 }
-/* ====== Tema 4: Title putih, Card/Box pakai primary ====== */
 html[data-theme-active="tema4"] .cardBox .card,
 html[data-theme-active="tema4"] .log-activity-card,
 html[data-theme-active="tema4"] .form-container,
@@ -262,7 +357,6 @@ html[data-theme-active="tema4"] .form-control::placeholder {
 html[data-theme-active="tema4"] .badge {
     color: #fff !important;
 }
-/* ===== Custom Pagination & Search Button ===== */
 .pagination {
     display: flex;
     justify-content: center;
@@ -318,7 +412,7 @@ html[data-theme-active="tema4"] .badge {
     font-family: 'Poppins', sans-serif;
 }
 
-/* Tema 1 (Default) */
+/* Tema 1 */
 :root {
     --primary: #78B3CE;
     --secondary: #F96E2A;
@@ -329,7 +423,7 @@ html[data-theme-active="tema4"] .badge {
     --black: #000000;
 }
 
-/* Tema 2 (Hijau & Coklat) */
+/* Tema 2 */
 html[data-theme-active="tema2"] {
     --primary: #A5B68D;
     --secondary: #DA8359;
@@ -337,7 +431,7 @@ html[data-theme-active="tema2"] {
     --background: #E7F0DB;
 }
 
-/* Tema 3 (Merah & Kuning) */
+/* Tema 3 */
 html[data-theme-active="tema3"] {
     --primary: #A31D1D;
     --secondary: #F29F58;
@@ -345,7 +439,7 @@ html[data-theme-active="tema3"] {
     --background: #FFF6D9;
 }
 
-/* Tema 4 (Biru Tua) */
+/* Tema 4 */
 html[data-theme-active="tema4"] {
     --primary: #130F2D;
     --secondary: #4477CE;
@@ -636,21 +730,18 @@ body {
     width: 100%;
     padding: 20px;
     display: grid;
-    /* Ubah dari 3 menjadi 5 kolom */
     grid-template-columns: repeat(5, 1fr);
-    /* Sedikit kurangi jarak antar kartu */
     grid-gap: 20px;
 }
 
 .cardBox .card {
     position: relative;
     background: var(--white);
-    /* Kurangi padding agar kartu lebih ramping */
     padding: 20px;
     border-radius: 20px;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Menambahkan ini agar konten di tengah secara vertikal */
+    align-items: center;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -658,7 +749,6 @@ body {
 .cardBox .card .numbers {
     position: relative;
     font-weight: 500;
-    /* Kecilkan ukuran font angka */
     font-size: 2.5rem;
     font-weight: bold;
     color: var(--black);
@@ -666,13 +756,11 @@ body {
 
 .cardBox .card .cardName {
     color: var(--gray);
-    /* Kecilkan ukuran font nama kartu */
     font-size: 1.1em;
     margin-top: 5px;
 }
 
 .cardBox .card .iconBox {
-    /* Kecilkan ukuran ikon */
     font-size: 3rem;
     color: var(--secondary);
 }
@@ -738,12 +826,12 @@ body {
 /* ===================== Responsive Design ===================== */
 @media (max-width: 992px) {
     .navigation {
-        left: -250px; /* Sembunyikan sidebar di luar layar */
+        left: -250px;
         z-index: 1000;
     }
     .navigation.active {
         width: 250px;
-        left: 0; /* Tampilkan sidebar saat aktif */
+        left: 0;
     }
     .main {
         width: 100%;
@@ -753,18 +841,18 @@ body {
         left: 250px;
     }
     .cardBox {
-        grid-template-columns: repeat(2, 1fr); /* 2 kartu per baris */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
     .cardBox {
-        grid-template-columns: repeat(1, 1fr); /* 1 kartu per baris */
+        grid-template-columns: repeat(1, 1fr);
     }
     .topbar .topbar-text {
         font-size: 1.2rem;
     }
     .user .user-text {
-        display: none; /* Sembunyikan teks nama pengguna, ikon saja cukup */
+        display: none;
     }
 }

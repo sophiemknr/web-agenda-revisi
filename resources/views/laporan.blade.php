@@ -116,13 +116,10 @@
                             $agendas instanceof \Illuminate\Pagination\LengthAwarePaginator ||
                                 $agendas instanceof \Illuminate\Pagination\Paginator)
                             <div class="pagination">
-                                {{-- First Page --}}
                                 <a href="{{ $agendas->url(1) }}"
                                     @if ($agendas->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;&lt;</a>
-                                {{-- Previous Page --}}
                                 <a href="{{ $agendas->previousPageUrl() ?? '#' }}"
                                     @if ($agendas->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;</a>
-                                {{-- Dynamic numbered pages --}}
                                 @php
                                     $current = $agendas->currentPage();
                                     $last = $agendas->lastPage();
@@ -148,10 +145,8 @@
                                         <a href="{{ $agendas->url($page) }}">{{ $page }}</a>
                                     @endif
                                 @endforeach
-                                {{-- Next Page --}}
                                 <a href="{{ $agendas->nextPageUrl() ?? '#' }}"
                                     @if (!$agendas->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;</a>
-                                {{-- Last Page --}}
                                 <a href="{{ $agendas->url($agendas->lastPage()) }}"
                                     @if (!$agendas->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;&gt;</a>
                             </div>
@@ -168,6 +163,16 @@
 
 @push('styles')
     <style>
+        h2.fw-bold.text-center {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-top: 18px;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            color: #000;
+        }
+
         html[data-theme-active="tema4"] .s-d-span {
             background-color: var(--tertiary) !important;
             color: #fff !important;

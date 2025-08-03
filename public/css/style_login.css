@@ -17,6 +17,63 @@
     --black: #000000;
 }
 
+html[data-theme-active="tema2"] {
+    --primary: #A5B68D;
+    --secondary: #DA8359;
+    --tertiary: #FBF8EF;
+    --background: #E7F0DB;
+    --white: #ffffff;
+    --gray: #686868;
+    --black: #000000;
+}
+
+html[data-theme-active="tema3"] {
+    --primary: #A31D1D;
+    --secondary: #F29F58;
+    --tertiary: #FBF8EF;
+    --background: #FFF6D9;
+    --white: #ffffff;
+    --gray: #686868;
+    --black: #000000;
+}
+
+html[data-theme-active="tema4"] {
+    --primary: #130F2D;
+    --secondary: #4477CE;
+    --tertiary: #221F43;
+    --background: #19133B;
+    --white: #ffffff;
+    --gray: #686868;
+    --black: #000000;
+}
+
+html[data-theme-active="tema4"] .container,
+html[data-theme-active="tema4"] .container form {
+    background-color: var(--tertiary) !important;
+}
+
+html[data-theme-active="tema4"] .container input {
+    background-color: var(--primary) !important;
+    color: #fff !important;
+}
+
+html[data-theme-active="tema4"] h1 {
+    color: white !important;
+}
+
+html[data-theme-active="tema4"] input:-webkit-autofill,
+html[data-theme-active="tema4"] input:-webkit-autofill:focus,
+html[data-theme-active="tema4"] input:-webkit-autofill:hover,
+html[data-theme-active="tema4"] input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 100px var(--primary) inset !important;
+    box-shadow: 0 0 0 100px var(--primary) inset !important;
+    -webkit-text-fill-color: #fff !important;
+    color: #fff !important;
+    caret-color: #fff !important;
+    border-radius: 8px;
+}
+
+
 body{
     background-color: var(--background);
     display: flex;
@@ -112,12 +169,12 @@ body{
 
 .password-container input {
     width: 100%;
-    padding-right: 48px;
+    padding-right: 40px;
 }
 
 .password-container .toggle-password {
     position: absolute;
-    right: 22px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
@@ -127,12 +184,11 @@ body{
 }
 
 .password-container .toggle-password ion-icon {
-    font-size: 22px;
+    font-size: 20px;
     color: var(--secondary);
     pointer-events: none;
 }
 
-/* Dropdown icon (select) style universal, adjust if needed for login page */
 select {
     appearance: none;
     -webkit-appearance: none;

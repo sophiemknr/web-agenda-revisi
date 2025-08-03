@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB; // <-- Jangan lupa tambahkan ini
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -25,7 +25,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Menambahkan constraint untuk memastikan data status valid
         DB::statement("ALTER TABLE agendas ADD CONSTRAINT agendas_status_check CHECK (status IN ('draft', 'tentative', 'confirm', 'cancel', 'reschedule'))");
     }
 

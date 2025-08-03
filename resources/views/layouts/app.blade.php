@@ -10,7 +10,7 @@
     <script>
         (function() {
             try {
-                var theme = localStorage.getItem('selectedTheme') || 'tema1'; // Default ke tema1
+                var theme = localStorage.getItem('selectedTheme') || 'tema1';
                 document.documentElement.setAttribute('data-theme-active', theme);
             } catch (e) {
                 console.error("Gagal menerapkan tema:", e);
@@ -37,8 +37,6 @@
                     @yield('content')
                 </div>
             </div>
-
-            @include('include.footer')
         </div>
     </div>
 
@@ -48,7 +46,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    {{-- Toast notification block only here, remove duplicates from child views --}}
     @stack('scripts')
 </body>
 

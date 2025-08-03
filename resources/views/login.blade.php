@@ -7,6 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link href="{{ asset('css/style_login.css') }}" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('selectedTheme') || 'tema1';
+                document.documentElement.setAttribute('data-theme-active', theme);
+            } catch (e) {
+                console.error("Gagal menerapkan tema:", e);
+            }
+        })();
+    </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
@@ -17,7 +27,7 @@
             <div class="form-container sign-in">
                 <form method="POST" action="{{ route('login.post') }}">
                     @csrf
-                    <h1>Agenda Bapak</h1>
+                    <h1>Agenda Wali Kota</h1>
                     @if ($errors->any())
                         <div class="error-message" style="color: red; margin-bottom: 10px;">
                             {{ $errors->first() }}
@@ -38,11 +48,6 @@
                     <span class="icon">
                         <img src="{{ asset('images/LOGO_FIX.png') }}" alt="Logo Kota Bogor" width="300">
                     </span>
-                    <div class="toggle-panel toggle-left">
-                        <h1>Selamat Datang Kembali!</h1>
-
-                        <button class="hidden" id="login">Masuk</button>
-                    </div>
                 </div>
             </div>
         </div>

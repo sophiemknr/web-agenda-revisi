@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
-// use Illuminate\Http\Request; // Not needed, use fully qualified name below
 
 class TrustProxies extends Middleware
 {
@@ -25,5 +24,5 @@ class TrustProxies extends Middleware
      *
      * @var null|int
      */
-    protected $headers = 0; // Default to 0, will auto-detect. Change to HEADER_X_FORWARDED_ALL if needed.
+    protected $headers = 0;
 }

@@ -1,4 +1,3 @@
-/* Picker bulan-tahun: button dan background sesuai tema */
 #apply-month-year {
     background: var(--secondary);
     color: #fff;
@@ -68,7 +67,6 @@ html[data-theme-active="tema4"] .days .today {
     color: #fff !important;
 }
 
-/* Responsive Styles for Agenda Page */
 @media (max-width: 992px) {
   .cards {
   .main,
@@ -135,7 +133,7 @@ html[data-theme-active="tema4"] .days .today {
   }
 }
 
-/* Tema 1 (Default) */
+/* Tema 1 */
 :root {
     --primary: #78B3CE;
     --secondary: #F96E2A;
@@ -146,7 +144,7 @@ html[data-theme-active="tema4"] .days .today {
     --black: #000000;
 }
 
-/* Tema 2 (Hijau & Coklat) */
+/* Tema 2 */
 html[data-theme-active="tema2"] {
     --primary: #A5B68D;
     --secondary: #DA8359;
@@ -154,7 +152,7 @@ html[data-theme-active="tema2"] {
     --background: #E7F0DB;
 }
 
-/* Tema 3 (Merah & Kuning) */
+/* Tema 3 */
 html[data-theme-active="tema3"] {
     --primary: #A31D1D;
     --secondary: #F29F58;
@@ -162,7 +160,7 @@ html[data-theme-active="tema3"] {
     --background: #FFF6D9;
 }
 
-/* Tema 4 (Biru Tua) */
+/* Tema 4 */
 html[data-theme-active="tema4"] {
     --primary: #130F2D;
     --secondary: #4477CE;
@@ -179,13 +177,13 @@ html[data-theme-active="tema4"] {
 .agenda-item {
     background-color: #fbf8ef;
     padding: 15px 20px;
-    margin-bottom: 10px; /* Reduce space between cards */
+    margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid #686868;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 6px; /* Reduce gap inside card */
+    gap: 6px;
     font-family: "Poppins", sans-serif;
     position: relative;
 }
@@ -396,10 +394,9 @@ html[data-theme-active="tema4"] .days div:hover {
     color: red;
 }
 
-/* Style KHUSUS untuk hari libur di akhir pekan (lebih spesifik) */
 .days .holiday-weekend {
-    background-color: red !important; /* Latar belakang merah */
-    color: white !important;         /* Teks berwarna putih */
+    background-color: red !important;
+    color: white !important;
     border-radius: 6px;
 }
 
@@ -409,11 +406,10 @@ html[data-theme-active="tema4"] .days div:hover {
 
 .btn-group {
     display: flex;
-    flex-wrap: wrap; /* Ini akan membuat tombol turun baris jika tidak muat */
-    gap: 5px; /* Memberi sedikit jarak antar tombol */
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
-/* Styling untuk deskripsi hari libur */
 html[data-theme-active="tema4"] .holiday-description {
     background-color: #221F43 !important;
     border-color: #383187 !important;
@@ -428,7 +424,7 @@ html[data-theme-active="tema4"] .holiday-description h2 {
 .holiday-description {
     padding: 20px;
     text-align: center;
-    background-color: #fff3f3; /* Latar belakang merah muda */
+    background-color: #fff3f3;
     border: 1px solid #ffcccc;
     border-radius: 10px;
 }
@@ -441,20 +437,18 @@ html[data-theme-active="tema4"] .holiday-description h2 {
 
 .holiday-description h3 {
     font-size: 1.1em;
-    color: #d9534f; /* Warna merah */
+    color: #d9534f;
     margin-top: 10px;
     font-weight: normal;
 }
 
 .holiday-description h2 {
     font-size: 1.5em;
-    color: #d9534f; /* Warna merah */
+    color: #d9534f;
     font-weight: bold;
     margin-top: 5px;
 }
 
-/* Modern filter status dropdown */
-/* Tema 4: filter dropdown dan icon lebih gelap */
 html[data-theme-active="tema4"] .filter-dropdown {
     border: 1px solid #fff;
     background: #221F43 !important;
@@ -485,7 +479,6 @@ html[data-theme-active="tema4"] .filter-dropdown {
     -moz-appearance: none;
 }
 
-/* Responsive Styles for Agenda Page */
 @media (max-width: 992px) {
     .cards {
         flex-direction: column;
@@ -493,10 +486,9 @@ html[data-theme-active="tema4"] .filter-dropdown {
         padding: 10px;
     }
 
-    /* Target div di dalam .cards pada halaman agenda */
     .agenda-container,
     .calendar-container {
-        width: 100% !important; /* !important untuk menimpa inline style */
+        width: 100% !important;
         max-width: 500px;
         margin-bottom: 20px;
     }

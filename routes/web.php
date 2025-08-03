@@ -7,13 +7,13 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
-// Rute Publik (Login)
+// Login
 Route::get('/', function () {
     return view('login');
 })->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 
-// Rute yang Membutuhkan Autentikasi
+// Autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-pdf', [AgendaController::class, 'laporanPdf'])->name('laporan.pdf');
     Route::get('/dashboard', [AgendaController::class, 'dashboard'])->name('dashboard');
@@ -31,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Laporan
     Route::get('/laporan', [AgendaController::class, 'laporan'])->name('laporan');
-
     Route::view('/settings', 'settings')->name('settings');
 
     // API
@@ -40,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/agenda-dates', [AgendaController::class, 'getAgendaDatesForMonth']);
     Route::get('/api/national-holidays', [AgendaController::class, 'getNationalHolidays']);
 
-    // Manajemen User (Khusus Superadmin/Admin)
+    // Manajemen User
     Route::middleware(['superadmin'])->group(function () {
         Route::get('/user', [UserController::class, 'index'])->name('user');
         Route::post('/user', [UserController::class, 'store'])->name('user.store');

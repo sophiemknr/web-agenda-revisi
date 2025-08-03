@@ -8,7 +8,6 @@
 
 @section('content')
     <div class="cardBox">
-        {{-- Kode untuk card-card status agenda yang sudah ada --}}
         @php
             $startDate = \Carbon\Carbon::now()->startOfMonth()->toDateString();
             $endDate = \Carbon\Carbon::now()->endOfMonth()->toDateString();
@@ -66,7 +65,6 @@
         </a>
     </div>
 
-    {{-- KODE BARU UNTUK LOG ACTIVITY --}}
     <div class="log-activity-container">
         <h2 class="log-activity-title">Log Activity</h2>
         <div class="log-activity-card">
@@ -114,13 +112,10 @@
                 </div>
                 <div style="flex:1;">
                     <div class="pagination">
-                        {{-- First Page --}}
                         <a href="{{ $logs->url(1) }}"
                             @if ($logs->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;&lt;</a>
-                        {{-- Previous Page --}}
                         <a href="{{ $logs->previousPageUrl() ?? '#' }}"
                             @if ($logs->onFirstPage()) style="pointer-events:none;opacity:0.5;" @endif>&lt;</a>
-                        {{-- Dynamic numbered pages --}}
                         @php
                             $current = $logs->currentPage();
                             $last = $logs->lastPage();
@@ -146,10 +141,8 @@
                                 <a href="{{ $logs->url($page) }}">{{ $page }}</a>
                             @endif
                         @endforeach
-                        {{-- Next Page --}}
                         <a href="{{ $logs->nextPageUrl() ?? '#' }}"
                             @if (!$logs->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;</a>
-                        {{-- Last Page --}}
                         <a href="{{ $logs->url($logs->lastPage()) }}"
                             @if (!$logs->hasMorePages()) style="pointer-events:none;opacity:0.5;" @endif>&gt;&gt;</a>
                     </div>

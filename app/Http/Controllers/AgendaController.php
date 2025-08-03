@@ -100,7 +100,6 @@ class AgendaController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        // Mencatat aktivitas
         $this->addToLog('Menambahkan agenda baru: ' . $agenda->title);
 
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil disimpan!');
@@ -142,13 +141,12 @@ class AgendaController extends Controller
     public function destroy($id)
     {
         $agenda = Agenda::findOrFail($id);
-        $title = $agenda->title; // Simpan judul untuk log
+        $title = $agenda->title;
 
         $agenda->delete();
 
         $this->addToLog('Menghapus agenda: ' . $title);
 
-        // PENTING: Kembalikan respons JSON, bukan redirect.
         return response()->json(['success' => 'Agenda berhasil dihapus.']);
     }
 
@@ -234,7 +232,6 @@ class AgendaController extends Controller
             'status' => 'reschedule',
         ]);;
 
-        // Mencatat aktivitas
         $this->addToLog('Merubah jadwal agenda: ' . $agenda->title);
 
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil di-reschedule!');
@@ -263,7 +260,6 @@ class AgendaController extends Controller
         $confirmCount = Agenda::where('status', "confirm")->whereBetween('date', [$startDate, $endDate])->count();
         $rescheduleCount = Agenda::where('status', 'reschedule')->whereBetween('date', [$startDate, $endDate])->count();
 
-        // Log Activity: Pagination, Search, Show Entries
         $show = (int) request()->input('log_show', 10);
         $search = request()->input('log_search', '');
         $logQuery = \App\Models\LogActivity::with('user')->latest();
@@ -292,8 +288,6 @@ class AgendaController extends Controller
     public function laporan(Request $request)
     {
         $query = Agenda::with('user')->orderBy('date', 'desc');
-
-        // Search
         $search = $request->input('log_search', '');
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -305,7 +299,6 @@ class AgendaController extends Controller
             });
         }
 
-        // Show entries per page
         $show = (int) $request->input('log_show', 10);
         if (!in_array($show, [5, 10, 25, 50, 100])) $show = 10;
 

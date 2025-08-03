@@ -36,6 +36,7 @@ html[data-theme-active="tema4"] .laporan-table td {
 html[data-theme-active="tema4"] .laporan-table tbody tr:hover {
     background-color: var(--secondary) !important;
 }
+
 /* =====================font google================ */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 

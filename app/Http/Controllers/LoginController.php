@@ -21,13 +21,11 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // 2. Define $credentials from the request
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Panggil tanpa parameter kedua
             $this->addToLog('User ' . Auth::user()->name . ' berhasil login.');
 
             return redirect()->intended('dashboard');
@@ -45,7 +43,6 @@ class LoginController extends Controller
     {
         $user = Auth::user();
 
-        // Panggil tanpa parameter kedua
         if ($user) {
             $this->addToLog('User ' . $user->name . ' berhasil logout.');
         }

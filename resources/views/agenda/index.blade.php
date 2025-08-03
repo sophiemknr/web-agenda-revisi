@@ -103,7 +103,6 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        // Toastr Notification
         @if (Session::has('success'))
             toastr.options = {
                 "closeButton": true,
@@ -112,16 +111,13 @@
             toastr.success("{{ session('success') }}");
         @endif
 
-        // Dropdown filter integration with agenda.js
         document.getElementById('agenda-status-filter').addEventListener('change', function() {
             var status = this.value;
-            // Simulate filter button click to reuse agenda.js logic
             var filterBtn = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.dataset.status ===
                 status);
             if (filterBtn) {
                 filterBtn.click();
             } else {
-                // If 'all' or not found, trigger the 'all' filter
                 var allBtn = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.dataset.status ===
                     'all');
                 if (allBtn) allBtn.click();
